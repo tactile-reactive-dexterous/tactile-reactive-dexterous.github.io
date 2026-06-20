@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import TrexHero from "@/components/TrexHero";
 import TactileWaveBackground from "@/components/TactileWaveBackground";
 import DemoGallery from "@/components/DemoGallery";
-import DatasetGallery from "@/components/DatasetGallery";
 import ArchitectureFigure from "@/components/ArchitectureFigure";
 import { AblationBars, ResultsBars, ResultsTable } from "@/components/ResultsChart";
 import DataEfficiencyCurve from "@/components/DataEfficiencyCurve";
@@ -84,13 +83,6 @@ const affiliations = [
 const logos = [
   { alt: "UC Berkeley", src: "/images/logos/uc-berkeley-logo.png", w: 1064, h: 214 },
   { alt: "NVIDIA", src: "/images/logos/nvidia-logo.png", w: 2756, h: 540 },
-];
-
-const stats = [
-  { num: "100h", label: "tactile-synchronized teleoperation data" },
-  { num: "22", label: "motor primitives × 207 objects" },
-  { num: "12", label: "real-world tactile-reactive tasks" },
-  { num: "+30 pts", label: "over the strongest baseline" },
 ];
 
 function Outline({ activeHref }: { activeHref: string }) {
@@ -226,15 +218,6 @@ function ArticleContent() {
             strongest baseline.
           </p>
 
-          <div className="trex-stats">
-            {stats.map((s) => (
-              <div className="trex-stat" key={s.label}>
-                <div className="trex-stat__num">{s.num}</div>
-                <div className="trex-stat__label">{s.label}</div>
-              </div>
-            ))}
-          </div>
-
           {/* ---- Motivation ---- */}
           <h2 id="motivation">Motivation: why touch, and why now</h2>
           <p>
@@ -305,19 +288,25 @@ function ArticleContent() {
           </p>
 
           <div className="trex-stats">
-            <div className="trex-stat"><div className="trex-stat__num">7,755</div><div className="trex-stat__label">teleoperated episodes</div></div>
-            <div className="trex-stat"><div className="trex-stat__num">502</div><div className="trex-stat__label">object × primitive combinations</div></div>
-            <div className="trex-stat"><div className="trex-stat__num">10</div><div className="trex-stat__label">fingertip tactile sensors</div></div>
-            <div className="trex-stat"><div className="trex-stat__num">30 Hz</div><div className="trex-stat__label">synchronized multi-stream capture</div></div>
+            <div className="trex-stat"><div className="trex-stat__num">50h</div><div className="trex-stat__label">Open-Sourced Teleop Play</div></div>
+            <div className="trex-stat"><div className="trex-stat__num">200+</div><div className="trex-stat__label">Daily Objects</div></div>
+            <div className="trex-stat"><div className="trex-stat__num">22</div><div className="trex-stat__label">Motion Primitives</div></div>
+            <div className="trex-stat"><div className="trex-stat__num">3</div><div className="trex-stat__label">Tactile Modalities</div></div>
           </div>
 
           <h3 className="article-subsection" id="dataset-gallery">Explore the dataset</h3>
           <p>
-            Browse the corpus by object and by motion primitive. Each clip is one object × motor-primitive demonstration
-            (head-camera view); filters are cross-linked, and <em>Resample</em> redraws a fresh random pool. Click any
-            clip to expand it.
+            We open-source an interactive visualizer for the full T-Rex Dataset: browse a random pool of trajectories,
+            filter by object and by motion primitive (filters are cross-linked), resample, and click any clip to expand
+            it. It opens in a dedicated page.
           </p>
-          <DatasetGallery />
+          <div className="ds-cta">
+            <div className="ds-cta__text">
+              <strong>T-Rex Dataset Visualizer</strong>
+              <span>3,838 trajectories · filter by object × motion primitive · streamed from Hugging Face.</span>
+            </div>
+            <a className="ds-cta__btn" href="visualizer/">Open the visualizer ↗</a>
+          </div>
 
           {/* ---- Architecture ---- */}
           <div className="tactile-bg__wrap">

@@ -27,7 +27,7 @@
 }
 
 /* Gold accent for inline links and resource buttons on the cream page. */
-.figure-page[data-theme="day"] .article-shell a:not(.article-link):not(.article-author-link) {
+.figure-page[data-theme="day"] .article-shell a:not(.article-link):not(.article-author-link):not(.ds-cta__btn) {
   color: var(--trex-gold);
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -576,6 +576,84 @@
 }
 .fail-card h4 { margin: 0 0 6px; font-family: var(--font-heading); font-weight: 500; font-size: 17px; }
 .fail-card p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--trex-muted); }
+
+/* ============================================================================
+   Layout overrides — T-Rex doesn't use the template's right-hand margin-note
+   gutter, so collapse the article grid to a CENTERED [TOC + content] layout
+   (no large empty right column), and never let the whole page scroll sideways
+   (inner figures/tables keep their own horizontal scroll).
+   ============================================================================ */
+html,
+body {
+  overflow-x: clip; /* clip (not hidden) so the sticky TOC still works */
+}
+
+@media (min-width: 1024px) {
+  .article-body[data-outline-open="true"] .article-layout {
+    width: min(1180px, 100%);
+    grid-template-columns: minmax(0, 200px) minmax(0, 880px);
+    column-gap: clamp(40px, 5vw, 96px);
+    justify-content: center;
+  }
+  .article-body[data-outline-open="true"] .article-outline {
+    grid-column: 1;
+    justify-self: end;
+    margin-right: 0;
+  }
+  .article-body[data-outline-open="true"] .article-shell {
+    grid-column: 2;
+  }
+}
+
+/* Authors wrap onto several lines instead of one overflowing row. */
+.article-title-block .article-authors,
+.article-title-block .article-authors__names {
+  max-width: 100%;
+}
+.article-title-block .article-authors__names {
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+/* ---- dataset visualizer call-to-action card ------------------------------ */
+.ds-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px 28px;
+  margin: 28px 0 0;
+  padding: 22px 24px;
+  border: 1px solid var(--trex-line);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 90% 10%, var(--trex-gold-soft), transparent 55%),
+    rgba(255, 255, 255, 0.55);
+}
+.ds-cta__text { flex: 1 1 320px; }
+.ds-cta__text strong {
+  display: block;
+  margin-bottom: 4px;
+  font-family: var(--font-heading);
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--trex-ink);
+}
+.ds-cta__text span { font-size: 15px; line-height: 1.5; color: var(--trex-muted); }
+.ds-cta__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--trex-gold), var(--trex-gold-bright));
+  color: #2a1c00 !important;
+  font-weight: 700;
+  font-size: 16px;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.ds-cta__btn:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(242, 168, 30, 0.34); }
 
 /* ---- responsive ---------------------------------------------------------- */
 @media (max-width: 720px) {
