@@ -58,6 +58,15 @@
   width: 100%;
   margin: 46px 0 0;
 }
+/* static paper figures (teaser, architecture) — white art on a soft card */
+.fig-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--trex-line);
+  border-radius: 12px;
+  background: #fff;
+}
 .trex-figure figcaption,
 .trex-caption {
   margin-top: 16px;

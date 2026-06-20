@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import TrexHero from "@/components/TrexHero";
 import TactileWaveBackground from "@/components/TactileWaveBackground";
 import DemoGallery from "@/components/DemoGallery";
-import ArchitectureFigure from "@/components/ArchitectureFigure";
 import { AblationBars, ResultsBars, ResultsTable } from "@/components/ResultsChart";
 import DataEfficiencyCurve from "@/components/DataEfficiencyCurve";
 import { FAILURE_CASES } from "@/data/trex";
@@ -200,6 +199,16 @@ function ArticleContent() {
             </div>
           </header>
 
+          {/* ---- Teaser figure ---- */}
+          <figure className="trex-figure">
+            <Image className="fig-img" src="/figures/teaser.png" alt="T-Rex overview" width={4060} height={2393} unoptimized />
+            <figcaption>
+              Figure 1: T-Rex overview — large-scale human egocentric pre-training plus tactile-grounded robot
+              mid-training, a Mixture-of-Transformer model with a spatio-temporal tactile encoder, and a 100-hour
+              tactile-rich dataset spanning 12 manipulation tasks.
+            </figcaption>
+          </figure>
+
           {/* ---- Abstract ---- */}
           <h2 id="abstract">Abstract</h2>
           <p>
@@ -322,9 +331,16 @@ function ArticleContent() {
                 <strong>Mixture-of-Transformer-Experts</strong> backbone with three experts: a <strong>latent expert</strong>{" "}
                 that predicts future visual representations, an <strong>action expert</strong> that plans a coarse action
                 chunk, and a lightweight <strong>tactile expert</strong> that adds high-frequency residual corrections.
-                The animation below walks through one control cycle.
+                The figure below shows how these experts fit together.
               </p>
-              <ArchitectureFigure figureNumber={1} />
+              <figure className="trex-figure">
+                <Image className="fig-img" src="/figures/architecture.png" alt="T-Rex model architecture" width={3829} height={2898} unoptimized />
+                <figcaption>
+                  Figure 2: The T-Rex model — a variable-rate Mixture-of-Transformer with a latent expert, a slow action
+                  expert, and a fast, lightweight tactile expert that performs high-frequency residual refinement via an
+                  asynchronous cascaded flow-matching scheme.
+                </figcaption>
+              </figure>
               <p>
                 The interaction is an <strong>asynchronous cascaded flow-matching</strong> scheme. The flow trajectory is
                 split at τ = 0.4: the action expert integrates the upper segment (τ : 1 → 0.4) over 6 steps to produce a
@@ -379,7 +395,7 @@ function ArticleContent() {
             hardest bimanual force-deformation tasks. Each task is evaluated over 16 randomized trials, with progress
             rubrics for multi-stage tasks. <strong>T-Rex is the top method on every one of the 12 tasks.</strong>
           </p>
-          <ResultsBars figureNumber={2} />
+          <ResultsBars figureNumber={3} />
           <p>
             Two findings stand out. First, <strong>large-scale pre-training is essential</strong>: policies trained from
             scratch on ~100 demos (ViTacFormer, RDP) collapse, while EgoScale&rsquo;s egocentric pre-training makes it
@@ -390,21 +406,21 @@ function ArticleContent() {
           </p>
 
           <h3 className="article-subsection" id="per-task">Per-task results</h3>
-          <ResultsTable figureNumber={3} />
+          <ResultsTable figureNumber={4} />
 
           <h3 className="article-subsection" id="ablations">Ablations</h3>
           <p>
             Every component earns its place. Removing touch entirely is the most damaging; the temporal VQ-VAE force
             encoder, the asynchronous cascade, and both training stages each contribute measurably.
           </p>
-          <AblationBars figureNumber={4} />
+          <AblationBars figureNumber={5} />
 
           <h3 className="article-subsection" id="data-efficiency">Data efficiency</h3>
           <p>
             Because tactile capabilities are acquired in mid-training, far fewer downstream demonstrations are needed to
             reach a given success level — the gain is largest exactly in the low-data regime.
           </p>
-          <DataEfficiencyCurve figureNumber={5} />
+          <DataEfficiencyCurve figureNumber={6} />
 
           {/* ---- Failure cases ---- */}
           <h2 id="failures">Failure cases</h2>
