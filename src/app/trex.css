@@ -599,10 +599,12 @@ body {
 
 @media (min-width: 1024px) {
   .article-body[data-outline-open="true"] .article-layout {
-    width: min(1180px, 100%);
-    grid-template-columns: minmax(0, 200px) minmax(0, 880px);
-    column-gap: clamp(40px, 5vw, 96px);
-    justify-content: center;
+    width: min(1200px, 100%);
+    grid-template-columns: minmax(0, 196px) minmax(0, 840px);
+    column-gap: clamp(40px, 5vw, 92px);
+    /* leave a modest right gutter (extra width pools on the right) rather than
+       centering perfectly tight — a touch more breathing room on the right. */
+    justify-content: start;
   }
   .article-body[data-outline-open="true"] .article-outline {
     grid-column: 1;
