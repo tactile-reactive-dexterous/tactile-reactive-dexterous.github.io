@@ -27,7 +27,7 @@
 }
 
 /* Gold accent for inline links and resource buttons on the cream page. */
-.figure-page[data-theme="day"] .article-shell a:not(.article-link):not(.article-author-link):not(.ds-cta__btn) {
+.figure-page[data-theme="day"] .article-shell a:not(.article-link):not(.article-author-link):not(.ds-cta__btn):not(.ds-open):not(.ds-preview) {
   color: var(--trex-gold);
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -666,18 +666,62 @@ body {
 }
 .ds-cta__btn:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(242, 168, 30, 0.34); }
 
-/* ---- inline dataset visualizer (original UI embedded on the homepage) ----- */
-.ds-embed { width: 100%; margin: 24px 0 0; }
-.ds-embed__frame {
+/* ---- dataset visualizer: clickable scaled live preview -> full page ------- */
+.ds-preview {
+  position: relative;
   display: block;
-  width: 100%;
-  height: 760px;
+  height: 380px;
+  margin: 18px 0 0;
+  overflow: hidden;
   border: 1px solid var(--trex-line);
   border-radius: 14px;
   background: #fff;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 }
-.ds-embed figcaption { margin-top: 10px; font-size: 14px; color: var(--trex-muted); }
-.ds-embed figcaption a { color: var(--trex-gold); }
+.ds-preview__frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 250%;
+  height: 250%;
+  border: 0;
+  transform: scale(0.4);
+  transform-origin: top left;
+  pointer-events: none;
+}
+.ds-preview__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(26, 23, 20, 0);
+  opacity: 0;
+  transition: background 0.25s ease, opacity 0.25s ease;
+}
+.ds-preview__overlay span {
+  padding: 10px 20px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--trex-gold), var(--trex-gold-bright));
+  color: #2a1c00;
+  font-weight: 700;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+}
+.ds-preview:hover .ds-preview__overlay { background: rgba(26, 23, 20, 0.18); opacity: 1; }
+.ds-open {
+  display: inline-flex;
+  margin-top: 14px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--trex-gold), var(--trex-gold-bright));
+  color: #2a1c00;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.ds-open:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(242, 168, 30, 0.34); }
 
 /* ---- dataset statistic charts ------------------------------------------- */
 .ds-charts__row {

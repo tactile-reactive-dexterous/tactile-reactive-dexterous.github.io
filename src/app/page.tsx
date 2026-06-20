@@ -320,16 +320,21 @@ function ArticleContent() {
 
           <h3 className="article-subsection" id="dataset-gallery">Explore the dataset</h3>
           <p>
-            Browse the full T-Rex Dataset right here: filter by object and by motion primitive in the sidebar (filters
-            are cross-linked), resample a fresh random pool, and click any clip to expand it.
+            Browse a 500-trajectory random subset, filter by object and motion primitive, and resample on demand — all
+            in your browser. Click the preview to open the full interactive visualizer.
           </p>
-          <figure className="ds-embed">
-            <iframe className="ds-embed__frame" src="visualizer/" title="T-Rex Dataset Visualizer" loading="lazy" />
-            <figcaption>
-              Interactive dataset visualizer (also available as a{" "}
-              <a href="visualizer/" target="_blank" rel="noopener noreferrer">full page&nbsp;↗</a>).
-            </figcaption>
-          </figure>
+          <a className="ds-preview" href="visualizer/" aria-label="Open the interactive dataset visualizer">
+            <iframe
+              className="ds-preview__frame"
+              src="visualizer/"
+              title="T-Rex Dataset Visualizer preview"
+              loading="lazy"
+              tabIndex={-1}
+              aria-hidden="true"
+            />
+            <span className="ds-preview__overlay"><span>Open visualizer →</span></span>
+          </a>
+          <a className="ds-open" href="visualizer/">Open the dataset visualizer →</a>
 
           {/* ---- Architecture ---- */}
           <div className="tactile-bg__wrap">
