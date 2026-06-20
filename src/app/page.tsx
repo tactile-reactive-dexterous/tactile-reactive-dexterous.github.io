@@ -185,7 +185,7 @@ function ArticleContent() {
                 ))}
               </p>
               <div className="article-links" aria-label="Resources">
-                <a className="article-link" href="https://tactile-rex.github.io" rel="noopener noreferrer" target="_blank">
+                <a className="article-link" href="https://tactile-reactive-dexterous.github.io" rel="noopener noreferrer" target="_blank">
                   <FileText aria-hidden="true" size={16} strokeWidth={1.8} /> Paper (coming soon)
                 </a>
                 <a className="article-link" href="https://github.com/ZhuoyangLiu2005/T-Rex" rel="noopener noreferrer" target="_blank">
@@ -366,9 +366,8 @@ function ArticleContent() {
           {/* ---- Demonstrations ---- */}
           <h2 id="demos">Demonstrations</h2>
           <p>
-            Real-world autonomous rollouts on the bimanual dexterous platform, shown <strong>multi-view</strong> — the
-            main demonstration alongside a second camera angle. Pick a task category, choose a task, and use the shared
-            play / speed controls; click any view to expand it.
+            Real-world autonomous policy rollouts on the bimanual dexterous platform. Pick a task to watch the policy
+            execute it; click the video to expand it.
           </p>
           <DemoGallery />
 
@@ -460,7 +459,7 @@ function ArticleContent() {
           <h2 id="citation">Citation</h2>
           <p>
             The paper and BibTeX will be released soon. In the meantime, please link back to{" "}
-            <a href="https://tactile-rex.github.io" rel="noopener noreferrer" target="_blank">tactile-rex.github.io</a>.
+            <a href="https://tactile-reactive-dexterous.github.io" rel="noopener noreferrer" target="_blank">tactile-reactive-dexterous.github.io</a>.
           </p>
           <p style={{ fontSize: 15, color: "var(--trex-muted)" }}>
             Project page adapted to the{" "}
