@@ -2,7 +2,7 @@
 
 import { Code, FileText, List, X } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import TrexHero from "@/components/TrexHero";
 import TactileWaveBackground from "@/components/TactileWaveBackground";
 import DemoGallery from "@/components/DemoGallery";
@@ -171,11 +171,13 @@ function ArticleContent() {
             <div className="article-authors" aria-label="Authors and affiliations">
               <p className="article-authors__names">
                 {authors.map((a, i) => (
-                  <span className="article-author" key={a.name}>
-                    {a.name}
-                    <sup>{a.marks}</sup>
+                  <Fragment key={a.name}>
+                    <span className="article-author">
+                      {a.name}
+                      <sup>{a.marks}</sup>
+                    </span>
                     {i < authors.length - 1 ? ", " : ""}
-                  </span>
+                  </Fragment>
                 ))}
               </p>
               <p className="article-authors__affiliations">
@@ -305,17 +307,16 @@ function ArticleContent() {
 
           <h3 className="article-subsection" id="dataset-gallery">Explore the dataset</h3>
           <p>
-            We open-source an interactive visualizer for the full T-Rex Dataset: browse a random pool of trajectories,
-            filter by object and by motion primitive (filters are cross-linked), resample, and click any clip to expand
-            it. It opens in a dedicated page.
+            Browse the full T-Rex Dataset right here: filter by object and by motion primitive in the sidebar (filters
+            are cross-linked), resample a fresh random pool, and click any clip to expand it.
           </p>
-          <div className="ds-cta">
-            <div className="ds-cta__text">
-              <strong>T-Rex Dataset Visualizer</strong>
-              <span>3,838 trajectories · filter by object × motion primitive · streamed from Hugging Face.</span>
-            </div>
-            <a className="ds-cta__btn" href="visualizer/">Open the visualizer ↗</a>
-          </div>
+          <figure className="ds-embed">
+            <iframe className="ds-embed__frame" src="visualizer/" title="T-Rex Dataset Visualizer" loading="lazy" />
+            <figcaption>
+              Interactive dataset visualizer (also available as a{" "}
+              <a href="visualizer/" target="_blank" rel="noopener noreferrer">full page&nbsp;↗</a>).
+            </figcaption>
+          </figure>
 
           {/* ---- Architecture ---- */}
           <div className="tactile-bg__wrap">
