@@ -679,6 +679,17 @@ body {
 .ds-embed figcaption { margin-top: 10px; font-size: 14px; color: var(--trex-muted); }
 .ds-embed figcaption a { color: var(--trex-gold); }
 
+/* ---- dataset statistic charts ------------------------------------------- */
+.ds-charts__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 720px) {
+  .ds-charts__row { grid-template-columns: 1fr; }
+}
+
 /* ---- responsive ---------------------------------------------------------- */
 @media (max-width: 720px) {
   .demo-views { grid-template-columns: 1fr; }
