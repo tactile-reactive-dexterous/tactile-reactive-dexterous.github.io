@@ -12,7 +12,6 @@ import { FAILURE_CASES } from "@/data/trex";
 const outlineItems: { href: string; label: string; level?: number }[] = [
   { href: "#article-title", label: "Title" },
   { href: "#abstract", label: "Abstract" },
-  { href: "#motivation", label: "Motivation" },
   { href: "#contributions", label: "Contributions" },
   { href: "#dataset", label: "The T-Rex Dataset" },
   { href: "#dataset-gallery", label: "Explore the dataset", level: 2 },
@@ -183,8 +182,8 @@ function ArticleContent() {
                 ))}
               </p>
               <div className="article-links" aria-label="Resources">
-                <a className="article-link" href="https://tactile-reactive-dexterous.github.io" rel="noopener noreferrer" target="_blank">
-                  <FileText aria-hidden="true" size={16} strokeWidth={1.8} /> Paper (coming soon)
+                <a className="article-link" href="https://arxiv.org/html/2606.17055v1" rel="noopener noreferrer" target="_blank">
+                  <FileText aria-hidden="true" size={16} strokeWidth={1.8} /> Paper
                 </a>
                 <a className="article-link" href="https://github.com/ZhuoyangLiu2005/T-Rex" rel="noopener noreferrer" target="_blank">
                   <Code aria-hidden="true" size={16} strokeWidth={1.8} /> Code
@@ -225,42 +224,6 @@ function ArticleContent() {
             deformable-object manipulation, achieving over <strong>30% higher average success rate</strong> than the
             strongest baseline.
           </p>
-
-          {/* ---- Motivation ---- */}
-          <h2 id="motivation">Motivation: why touch, and why now</h2>
-          <p>
-            Human dexterity relies on more than vision; it fundamentally depends on the ability to feel and rapidly react
-            to fine-grained tactile signals. Everyday tasks such as sliding a thin card out of a slot or opening a lock
-            with a key are effortless for people, yet remain challenging for current robot policies. Mastering them
-            requires <strong>tactile-reactive</strong> behaviors: fast, immediate, closed-loop motor responses to touch
-            that operate far faster than conventional vision-based control loops allow — rich contact dynamics, rapid
-            force variations, micro-slips, and local deformations that demand a control loop running faster than any
-            camera stream can support.
-          </p>
-          <p>
-            Today&rsquo;s most advanced robot foundation models rely on cameras to understand the world and drive their
-            actions. But cameras cannot see force, cannot sense slip, and cannot perceive deformation — precisely the
-            information that matters most for fine manipulation like screwing in a bulb, inserting a connector, or
-            pinching a soft object. Robots handle simple grasping reasonably well, but their success rates drop sharply
-            the moment a task demands genuine touch. We trace this to three obstacles:
-          </p>
-          <ul>
-            <li>
-              <strong>Data scarcity &amp; no standardized evaluation.</strong> Large-scale pre-training is predominantly
-              visual, leaving contact transitions, force variations, micro-slips, and local deformations largely
-              unobservable — and the field lacks a benchmark designed specifically for tactile dexterous manipulation.
-            </li>
-            <li>
-              <strong>Architectural constraints in VLAs.</strong> There is a fundamental frequency mismatch:
-              tactile-reactive control needs closed-loop responses to high-frequency touch, whereas VLM backbones run at
-              much lower frequencies. Tactile signals are high-frequency and sparsely localized around contact events.
-            </li>
-            <li>
-              <strong>Static tactile encoders.</strong> Prior work mostly stuffs touch in as another low-frequency input
-              stream, processed synchronously with vision — unable to capture the high-frequency dynamics at the instant
-              of contact, where the meaning of a tactile signal lives in how it evolves over time.
-            </li>
-          </ul>
 
           {/* ---- Contributions ---- */}
           <h2 id="contributions">Contributions</h2>
@@ -467,8 +430,9 @@ function ArticleContent() {
           {/* ---- Citation ---- */}
           <h2 id="citation">Citation</h2>
           <p>
-            T-Rex is under active development. The paper, BibTeX, dataset, and code will be posted on this page as they
-            are released — please check back, and feel free to link to{" "}
+            The T-Rex paper is available on{" "}
+            <a href="https://arxiv.org/html/2606.17055v1" rel="noopener noreferrer" target="_blank">arXiv</a>. BibTeX, the
+            dataset, and code will be posted here as they are released — feel free to link to{" "}
             <a href="https://tactile-reactive-dexterous.github.io" rel="noopener noreferrer" target="_blank">tactile-reactive-dexterous.github.io</a>.
           </p>
           <p style={{ fontSize: 15, color: "var(--trex-muted)" }}>
