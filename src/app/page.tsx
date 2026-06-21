@@ -408,6 +408,12 @@ function ArticleContent() {
               </div>
             ))}
           </div>
+          <figure className="trex-figure">
+            <ZoomableImage className="fig-img" src="/figures/fail_case.jpg" alt="T-Rex representative failure cases" width={2101} height={2076} />
+            <figcaption>
+              Representative failure cases — the red boxes highlight the contact issue behind each failure mode.
+            </figcaption>
+          </figure>
 
           {/* ---- Limitations ---- */}
           <h2 id="limitations">Limitations &amp; future directions</h2>
