@@ -67,6 +67,37 @@
   border-radius: 12px;
   background: #fff;
 }
+
+/* ---- animated teaser: pale base + per-region full-colour reveals --------- */
+.teaser-anim {
+  position: relative;
+  width: 100%;
+  border: 1px solid var(--trex-line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+.teaser-anim__base,
+.teaser-anim__region {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.teaser-anim__base { filter: saturate(0.12) brightness(1.2); }
+.teaser-anim__region {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.6s ease;
+}
+.teaser-anim__beat {
+  margin-top: 12px;
+  padding: 9px 14px;
+  border-left: 3px solid var(--trex-gold-bright);
+  background: var(--trex-gold-soft);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--trex-ink);
+}
 .trex-figure figcaption,
 .trex-caption {
   margin-top: 16px;

@@ -6,6 +6,7 @@ import { Fragment, useEffect, useState } from "react";
 import TrexHero from "@/components/TrexHero";
 import DemoGallery from "@/components/DemoGallery";
 import ZoomableImage from "@/components/ZoomableImage";
+import TeaserAnimation from "@/components/TeaserAnimation";
 import CitationBibtex from "@/components/CitationBibtex";
 import { AblationBars, ResultsBars, ResultsTable } from "@/components/ResultsChart";
 import { FAILURE_CASES } from "@/data/trex";
@@ -198,15 +199,8 @@ function ArticleContent() {
             </div>
           </header>
 
-          {/* ---- Teaser figure ---- */}
-          <figure className="trex-figure">
-            <ZoomableImage className="fig-img" src="/figures/teaser.png" alt="T-Rex overview" width={4060} height={2393} />
-            <figcaption>
-              Figure 1: T-Rex overview — large-scale human egocentric pre-training plus tactile-grounded robot
-              mid-training, a Mixture-of-Transformer model with a spatio-temporal tactile encoder, and a 100-hour
-              tactile-rich dataset spanning 12 manipulation tasks.
-            </figcaption>
-          </figure>
+          {/* ---- Teaser figure (animated staged light-up) ---- */}
+          <TeaserAnimation />
 
           {/* ---- Abstract ---- */}
           <h2 id="abstract">Abstract</h2>
