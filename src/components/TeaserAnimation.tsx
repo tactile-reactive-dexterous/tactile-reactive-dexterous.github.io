@@ -16,7 +16,7 @@ const SRC = "/figures/teaser.png";
 const REGIONS = [
   { name: "Human egocentric pre-training", clip: "inset(1.8% 77.5% 1.8% 1.2%)" },
   { name: "Latent + Action experts — slow visuomotor planning", clip: "inset(2% 41.3% 49% 22%)" },
-  { name: "T-Rex Dataset — tactile-rich mid-training", clip: "inset(50.5% 23% 4% 22%)" },
+  { name: "T-Rex Dataset — tactile-rich mid-training", clip: "inset(50.5% 22% 2.8% 21%)" },
   { name: "Tactile expert — fast tactile refinement", clip: "inset(2% 23% 49% 58.4%)" },
   { name: "Post-training tasks — contact-rich skills", clip: "inset(1.8% 1.2% 1.8% 77.5%)" },
 ];
