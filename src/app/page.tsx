@@ -24,7 +24,6 @@ const outlineItems: { href: string; label: string; level?: number }[] = [
   { href: "#per-task", label: "Per-task results", level: 2 },
   { href: "#ablations", label: "Ablations", level: 2 },
   { href: "#failures", label: "Failure cases" },
-  { href: "#related", label: "Related work" },
   { href: "#limitations", label: "Limitations" },
   { href: "#conclusion", label: "Conclusion" },
   { href: "#citation", label: "Citation" },
@@ -445,23 +444,6 @@ function ArticleContent() {
               </div>
             ))}
           </div>
-
-          {/* ---- Related work ---- */}
-          <h2 id="related">Related work</h2>
-          <p>
-            Tactile sensing is increasingly central to manipulation: prior work injects raw touch via shallow MLPs, adds
-            structured tactile modeling, or aligns tactile representations with vision-language latents (ViTacFormer,
-            Tactile-VLA, VTLA, OmniVTLA, FuSe, VLA-Touch, ForceVLA). Yet no canonical tactile-aware recipe benefits from
-            large-scale pre- and mid-training for dexterous hands, and most prior work targets single-arm or
-            parallel-gripper embodiments. T-Rex contributes a tactile-reactive MoT with an asynchronous, high-frequency
-            tactile expert built specifically for contact-rich bimanual dexterity.
-          </p>
-          <p>
-            T-Rex also sits within the move toward unified multimodal foundation models and action experts (π0, GR00T N1)
-            augmented with future prediction and world models. It extends the latent-prediction-plus-action paradigm by
-            fusing touch as a genuinely new modality, and leverages the egocentric-video ecosystem (EgoDex, Ego4D,
-            HOI4D; EgoScale&rsquo;s scaling laws) for pre-training before aligning on tactile-rich robot data.
-          </p>
 
           {/* ---- Limitations ---- */}
           <h2 id="limitations">Limitations &amp; future directions</h2>
