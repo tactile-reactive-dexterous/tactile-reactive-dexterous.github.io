@@ -266,15 +266,14 @@ function ArticleContent() {
           </div>
 
           <figure className="trex-figure">
-            <div className="ds-charts__row">
-              <Image className="fig-img" src="/figures/category_duration_pie.png" alt="Share of demonstration time across task categories" width={1933} height={1380} unoptimized />
-              <Image className="fig-img" src="/figures/verb_frequency_chart_hours.png" alt="Hours of data per motor primitive" width={2179} height={981} unoptimized />
+            <div className="ds-charts">
+              <Image className="fig-img ds-chart--pie" src="/figures/category_duration_pie.png" alt="Share of demonstration time across task categories" width={1933} height={1380} unoptimized />
+              <Image className="fig-img ds-chart--bar" src="/figures/verb_frequency_chart_hours.png" alt="Hours of data per motor primitive" width={2179} height={981} unoptimized />
+              <Image className="fig-img ds-chart--wide" src="/figures/object_frequency_chart.png" alt="Demonstrations per object (long tail)" width={7466} height={1179} unoptimized />
             </div>
-            <Image className="fig-img" style={{ marginTop: "16px" }} src="/figures/object_frequency_chart.png" alt="Demonstrations per object (long tail)" width={7466} height={1179} unoptimized />
             <figcaption>
-              T-Rex Dataset statistics — share of demonstration time across task categories (left), hours of data per
-              motor primitive (right), and the long-tail distribution of demonstrations across 200+ household objects
-              (bottom).
+              T-Rex Dataset statistics — share of demonstration time across task categories, hours of data per motor
+              primitive, and the long-tail distribution of demonstrations across 200+ household objects.
             </figcaption>
           </figure>
 

@@ -723,16 +723,16 @@ body {
 }
 .ds-open:hover { transform: translateY(-1px); background: #00254a; }
 
-/* ---- dataset statistic charts ------------------------------------------- */
-.ds-charts__row {
+/* ---- dataset statistic charts (stacked, centered, size-capped) ----------- */
+.ds-charts {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  align-items: start;
+  gap: 18px;
+  justify-items: center;
+  margin-top: 4px;
 }
-@media (max-width: 720px) {
-  .ds-charts__row { grid-template-columns: 1fr; }
-}
+.ds-chart--pie { max-width: 460px; }
+.ds-chart--bar { max-width: 680px; }
+.ds-chart--wide { max-width: 100%; }
 
 /* ---- responsive ---------------------------------------------------------- */
 @media (max-width: 720px) {
