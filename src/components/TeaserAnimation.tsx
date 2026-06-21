@@ -1,12 +1,13 @@
 "use client";
 
 import { Pause, Play, RotateCcw } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-// Animated teaser: the whole figure starts pale; then each region lights up
-// (returns to full colour) in sequence. Implemented as full-colour copies of
-// teaser.png clipped to each region, fading in over a desaturated base — so it
-// stays perfectly aligned with the figure without reconstructing every element.
+// Animated teaser: the whole figure starts as a very pale, washed-out colour
+// (as if a ~60% white cloth lies over it), then each region lights up to full
+// colour in sequence. Implemented as full-colour copies of teaser.png clipped
+// to each region, fading in over a low-opacity base — so it stays perfectly
+// aligned with the figure without reconstructing every element.
 const SRC = "/figures/teaser.png";
 
 // clip-path inset(top right bottom left), as % of the figure. Tuned to the
@@ -19,49 +20,66 @@ const REGIONS = [
   { name: "Tactile expert — fast tactile refinement", clip: "inset(2.5% 22.5% 51.5% 59.1%)" },
   { name: "Post-training tasks — contact-rich skills", clip: "inset(2.5% 1.5% 2.5% 78.5%)" },
 ];
-const STEPS = REGIONS.length;
-const TICK_MS = 1300;
+const N = REGIONS.length;
+const DURATION = 7000; // ms for the bar to fill 0 -> 100%
+const HOLD = 1500; // ms held at 100% before looping
 
 export default function TeaserAnimation() {
-  const [step, setStep] = useState(0);
-  const [playing, setPlaying] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const progressRef = useRef(0);
 
   useEffect(() => {
-    if (!playing) return;
-    const id = window.setInterval(() => setStep((s) => (s >= STEPS ? 0 : s + 1)), TICK_MS);
-    return () => window.clearInterval(id);
-  }, [playing]);
+    progressRef.current = progress;
+  }, [progress]);
 
-  const caption =
-    step === 0 ? "The full T-Rex pipeline — watch each stage light up." : REGIONS[step - 1].name;
+  useEffect(() => {
+    if (paused) return;
+    let raf = 0;
+    const start = performance.now() - progressRef.current * DURATION;
+    const tick = (t: number) => {
+      const elapsed = (t - start) % (DURATION + HOLD);
+      setProgress(Math.min(1, elapsed / DURATION));
+      raf = window.requestAnimationFrame(tick);
+    };
+    raf = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(raf);
+  }, [paused]);
+
+  const lit = (i: number) => progress >= (i + 1) / N - 0.0001;
+  let activeIdx = -1;
+  for (let i = 0; i < N; i++) if (lit(i)) activeIdx = i;
+  const caption = activeIdx < 0 ? "The full T-Rex pipeline — watch each stage light up." : REGIONS[activeIdx].name;
 
   return (
     <figure className="trex-figure">
       <div className="trex-fig-controls">
-        <button className="trex-btn" onClick={() => setPlaying((p) => !p)} type="button">
-          {playing ? <Pause size={14} /> : <Play size={14} />} {playing ? "Pause" : "Play"}
+        <button className="trex-btn" onClick={() => setPaused((p) => !p)} type="button">
+          {paused ? <Play size={14} /> : <Pause size={14} />} {paused ? "Play" : "Pause"}
         </button>
-        <button className="trex-btn" onClick={() => { setStep(0); setPlaying(true); }} type="button">
+        <button
+          className="trex-btn"
+          onClick={() => { progressRef.current = 0; setProgress(0); setPaused(false); }}
+          type="button"
+        >
           <RotateCcw size={13} /> Replay
         </button>
         <input
-          aria-label="Teaser animation step"
+          aria-label="Teaser animation progress"
           className="trex-range"
           type="range"
           min={0}
-          max={STEPS}
-          step={1}
-          value={step}
-          onChange={(e) => { setPlaying(false); setStep(Number(e.currentTarget.value)); }}
+          max={1}
+          step={0.001}
+          value={progress}
+          onChange={(e) => { setPaused(true); setProgress(Number(e.currentTarget.value)); }}
         />
-        <span style={{ fontVariantNumeric: "tabular-nums" }}>{step}/{STEPS}</span>
+        <span style={{ fontVariantNumeric: "tabular-nums" }}>{Math.round(progress * 100)}%</span>
       </div>
 
       <div className="teaser-anim">
-        {/* pale base */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className="teaser-anim__base" src={SRC} alt="T-Rex overview" />
-        {/* full-colour region reveals */}
         {REGIONS.map((r, i) => (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -70,7 +88,7 @@ export default function TeaserAnimation() {
             src={SRC}
             alt=""
             aria-hidden="true"
-            style={{ clipPath: r.clip, WebkitClipPath: r.clip, opacity: step > i ? 1 : 0 }}
+            style={{ clipPath: r.clip, WebkitClipPath: r.clip, opacity: lit(i) ? 1 : 0 }}
           />
         ))}
       </div>

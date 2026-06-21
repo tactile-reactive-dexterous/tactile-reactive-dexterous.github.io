@@ -83,7 +83,10 @@
   width: 100%;
   height: auto;
 }
-.teaser-anim__base { filter: saturate(0.12) brightness(1.2); }
+/* "off" state = very pale colour, like a ~60% white cloth over the figure
+   (low opacity over the white card keeps the hues but washes them out — not
+   grayscale). Each region copy fades in at full opacity to "light up". */
+.teaser-anim__base { opacity: 0.4; }
 .teaser-anim__region {
   position: absolute;
   inset: 0;
