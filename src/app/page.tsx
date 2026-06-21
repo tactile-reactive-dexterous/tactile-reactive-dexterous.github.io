@@ -6,6 +6,7 @@ import { Fragment, useEffect, useState } from "react";
 import TrexHero from "@/components/TrexHero";
 import TactileWaveBackground from "@/components/TactileWaveBackground";
 import DemoGallery from "@/components/DemoGallery";
+import ZoomableImage from "@/components/ZoomableImage";
 import { AblationBars, ResultsBars, ResultsTable } from "@/components/ResultsChart";
 import { FAILURE_CASES } from "@/data/trex";
 
@@ -199,7 +200,7 @@ function ArticleContent() {
 
           {/* ---- Teaser figure ---- */}
           <figure className="trex-figure">
-            <Image className="fig-img" src="/figures/teaser.png" alt="T-Rex overview" width={4060} height={2393} unoptimized />
+            <ZoomableImage className="fig-img" src="/figures/teaser.png" alt="T-Rex overview" width={4060} height={2393} />
             <figcaption>
               Figure 1: T-Rex overview — large-scale human egocentric pre-training plus tactile-grounded robot
               mid-training, a Mixture-of-Transformer model with a spatio-temporal tactile encoder, and a 100-hour
@@ -266,14 +267,21 @@ function ArticleContent() {
           </div>
 
           <figure className="trex-figure">
-            <div className="ds-charts">
-              <Image className="fig-img ds-chart--pie" src="/figures/category_duration_pie.png" alt="Share of demonstration time across task categories" width={1933} height={1380} unoptimized />
-              <Image className="fig-img ds-chart--bar" src="/figures/verb_frequency_chart_hours.png" alt="Hours of data per motor primitive" width={2179} height={981} unoptimized />
-              <Image className="fig-img ds-chart--wide" src="/figures/object_frequency_chart.png" alt="Demonstrations per object (long tail)" width={7466} height={1179} unoptimized />
+            <div className="chart-grid">
+              <div className="chart-cell">
+                <ZoomableImage src="/figures/category_duration_pie.png" alt="Share of demonstration time across task categories" width={1933} height={1380} />
+              </div>
+              <div className="chart-cell">
+                <ZoomableImage src="/figures/verb_frequency_chart_hours.png" alt="Hours of data per motor primitive" width={2179} height={981} />
+              </div>
+              <div className="chart-cell chart-cell--object">
+                <ZoomableImage src="/figures/object_frequency_chart.png" alt="Demonstrations per object (long tail)" width={7466} height={1179} />
+              </div>
             </div>
             <figcaption>
-              T-Rex Dataset statistics — share of demonstration time across task categories, hours of data per motor
-              primitive, and the long-tail distribution of demonstrations across 200+ household objects.
+              T-Rex Dataset statistics — top-left: share of demonstration time across task categories; top-right: hours
+              of data per motor primitive; bottom: the long-tail distribution of demonstrations across 200+ household
+              objects.
             </figcaption>
           </figure>
 
@@ -312,7 +320,7 @@ function ArticleContent() {
                 The figure below shows how these experts fit together.
               </p>
               <figure className="trex-figure">
-                <Image className="fig-img" src="/figures/architecture.png" alt="T-Rex model architecture" width={3829} height={2898} unoptimized />
+                <ZoomableImage className="fig-img" src="/figures/architecture.png" alt="T-Rex model architecture" width={3829} height={2898} />
                 <figcaption>
                   Figure 2: The T-Rex model — a variable-rate Mixture-of-Transformer with a latent expert, a slow action
                   expert, and a fast, lightweight tactile expert that performs high-frequency residual refinement via an

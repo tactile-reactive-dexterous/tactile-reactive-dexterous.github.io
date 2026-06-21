@@ -723,16 +723,67 @@ body {
 }
 .ds-open:hover { transform: translateY(-1px); background: #00254a; }
 
-/* ---- dataset statistic charts (stacked, centered, size-capped) ----------- */
-.ds-charts {
+/* ---- dataset statistic charts (doorman composition layout) --------------- */
+.chart-grid {
   display: grid;
+  grid-template-columns: 2fr 3fr;
   gap: 18px;
-  justify-items: center;
   margin-top: 4px;
 }
-.ds-chart--pie { max-width: 460px; }
-.ds-chart--bar { max-width: 680px; }
-.ds-chart--wide { max-width: 100%; }
+@media (max-width: 720px) {
+  .chart-grid { grid-template-columns: 1fr; }
+}
+.chart-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--trex-line);
+  border-radius: 12px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.chart-cell:hover { border-color: var(--trex-gold-bright); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06); }
+.chart-cell--object { grid-column: 1 / -1; }
+.chart-cell img { width: 100%; height: auto; display: block; }
+
+/* ---- image lightbox (click any figure to enlarge) ----------------------- */
+.img-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  background: rgba(0, 0, 0, 0.85);
+  cursor: zoom-out;
+}
+.img-lightbox__img {
+  max-width: 96vw;
+  max-height: 92vh;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #fff;
+  cursor: default;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+.img-lightbox__close {
+  position: fixed;
+  top: 18px;
+  right: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  cursor: pointer;
+}
+.img-lightbox__close:hover { background: rgba(255, 255, 255, 0.3); }
 
 /* ---- responsive ---------------------------------------------------------- */
 @media (max-width: 720px) {
