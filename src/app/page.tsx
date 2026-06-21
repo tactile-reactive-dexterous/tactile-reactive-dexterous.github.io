@@ -4,7 +4,6 @@ import { Code, FileText, List, X } from "lucide-react";
 import Image from "next/image";
 import { Fragment, useEffect, useState } from "react";
 import TrexHero from "@/components/TrexHero";
-import TactileWaveBackground from "@/components/TactileWaveBackground";
 import DemoGallery from "@/components/DemoGallery";
 import ZoomableImage from "@/components/ZoomableImage";
 import { AblationBars, ResultsBars, ResultsTable } from "@/components/ResultsChart";
@@ -304,40 +303,35 @@ function ArticleContent() {
           <a className="ds-open" href="visualizer/">Open the dataset visualizer →</a>
 
           {/* ---- Architecture ---- */}
-          <div className="tactile-bg__wrap">
-            <TactileWaveBackground variant="mixed" />
-            <div className="tactile-bg__inner">
-              <h2 id="architecture">Model &amp; Architecture</h2>
-              <p>
-                T-Rex is built around one idea: contact-rich dexterity needs <strong>two clocks running at once</strong>.
-                Vision and language tell the robot what to do and roughly how to move, but they are too slow and too
-                coarse to manage the millisecond-scale forces that decide whether an egg cracks, a card slips, or a bulb
-                threads cleanly. T-Rex therefore splits the policy into a low-frequency visuomotor planning stream and a
-                high-frequency tactile refinement stream, fused inside one shared transformer via a{" "}
-                <strong>Mixture-of-Transformer-Experts</strong> backbone with three experts: a <strong>latent expert</strong>{" "}
-                that predicts future visual representations, an <strong>action expert</strong> that plans a coarse action
-                chunk, and a lightweight <strong>tactile expert</strong> that adds high-frequency residual corrections.
-                The figure below shows how these experts fit together.
-              </p>
-              <figure className="trex-figure">
-                <ZoomableImage className="fig-img" src="/figures/architecture.png" alt="T-Rex model architecture" width={3829} height={2898} />
-                <figcaption>
-                  Figure 2: The T-Rex model — a variable-rate Mixture-of-Transformer with a latent expert, a slow action
-                  expert, and a fast, lightweight tactile expert that performs high-frequency residual refinement via an
-                  asynchronous cascaded flow-matching scheme.
-                </figcaption>
-              </figure>
-              <p>
-                The interaction is an <strong>asynchronous cascaded flow-matching</strong> scheme. The flow trajectory is
-                split at τ = 0.4: the action expert integrates the upper segment (τ : 1 → 0.4) over 6 steps to produce a
-                coarse plan, whose vision-language context is cached as a frozen snapshot. The tactile expert clones that
-                cache and finishes the lower segment (τ : 0.4 → 0) over just 4 cheap steps, conditioned on live tactile
-                tokens — and re-fires at intra-chunk offsets {"{0, 4, 8, 12}"}, four fast tactile ticks per slow
-                visuomotor tick. Because the expensive vision/planning compute is amortized across many fast ticks,
-                per-step cost is dominated by four lightweight tactile steps — fast enough for real closed-loop reaction.
-              </p>
-            </div>
-          </div>
+          <h2 id="architecture">Model &amp; Architecture</h2>
+          <p>
+            T-Rex is built around one idea: contact-rich dexterity needs <strong>two clocks running at once</strong>.
+            Vision and language tell the robot what to do and roughly how to move, but they are too slow and too coarse
+            to manage the millisecond-scale forces that decide whether an egg cracks, a card slips, or a bulb threads
+            cleanly. T-Rex therefore splits the policy into a low-frequency visuomotor planning stream and a
+            high-frequency tactile refinement stream, fused inside one shared transformer via a{" "}
+            <strong>Mixture-of-Transformer-Experts</strong> backbone with three experts: a <strong>latent expert</strong>{" "}
+            that predicts future visual representations, an <strong>action expert</strong> that plans a coarse action
+            chunk, and a lightweight <strong>tactile expert</strong> that adds high-frequency residual corrections. The
+            figure below shows how these experts fit together.
+          </p>
+          <figure className="trex-figure">
+            <ZoomableImage className="fig-img" src="/figures/architecture.png" alt="T-Rex model architecture" width={3829} height={2898} />
+            <figcaption>
+              Figure 2: The T-Rex model — a variable-rate Mixture-of-Transformer with a latent expert, a slow action
+              expert, and a fast, lightweight tactile expert that performs high-frequency residual refinement via an
+              asynchronous cascaded flow-matching scheme.
+            </figcaption>
+          </figure>
+          <p>
+            The interaction is an <strong>asynchronous cascaded flow-matching</strong> scheme. The flow trajectory is
+            split at τ = 0.4: the action expert integrates the upper segment (τ : 1 → 0.4) over 6 steps to produce a
+            coarse plan, whose vision-language context is cached as a frozen snapshot. The tactile expert clones that
+            cache and finishes the lower segment (τ : 0.4 → 0) over just 4 cheap steps, conditioned on live tactile
+            tokens — and re-fires at intra-chunk offsets {"{0, 4, 8, 12}"}, four fast tactile ticks per slow visuomotor
+            tick. Because the expensive vision/planning compute is amortized across many fast ticks, per-step cost is
+            dominated by four lightweight tactile steps — fast enough for real closed-loop reaction.
+          </p>
 
           <h3 className="article-subsection" id="tactile-encoder">Temporal tactile VQ-VAE encoder</h3>
           <p>
