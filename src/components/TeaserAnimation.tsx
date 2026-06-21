@@ -15,10 +15,10 @@ const SRC = "/figures/teaser.png";
 // T-Rex Dataset | Post-training Tasks).
 const REGIONS = [
   { name: "Human egocentric pre-training", clip: "inset(1.8% 77.5% 1.8% 1.2%)" },
-  { name: "Latent + Action experts — slow visuomotor planning", clip: "inset(2.5% 41% 51.5% 22.3%)" },
-  { name: "T-Rex Dataset — tactile-rich mid-training", clip: "inset(49% 22.5% 2.5% 22.3%)" },
-  { name: "Tactile expert — fast tactile refinement", clip: "inset(2.5% 22.5% 51.5% 59.1%)" },
-  { name: "Post-training tasks — contact-rich skills", clip: "inset(2.5% 1.5% 2.5% 78.5%)" },
+  { name: "Latent + Action experts — slow visuomotor planning", clip: "inset(2% 41.3% 49% 22%)" },
+  { name: "T-Rex Dataset — tactile-rich mid-training", clip: "inset(50.5% 23% 4% 22%)" },
+  { name: "Tactile expert — fast tactile refinement", clip: "inset(2% 23% 49% 58.4%)" },
+  { name: "Post-training tasks — contact-rich skills", clip: "inset(1.8% 1.2% 1.8% 77.5%)" },
 ];
 const N = REGIONS.length;
 const DURATION = 7000; // ms for the bar to fill 0 -> 100%
