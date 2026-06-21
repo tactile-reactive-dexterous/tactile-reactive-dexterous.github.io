@@ -6,6 +6,7 @@ import { Fragment, useEffect, useState } from "react";
 import TrexHero from "@/components/TrexHero";
 import DemoGallery from "@/components/DemoGallery";
 import ZoomableImage from "@/components/ZoomableImage";
+import CitationBibtex from "@/components/CitationBibtex";
 import { AblationBars, ResultsBars, ResultsTable } from "@/components/ResultsChart";
 import { FAILURE_CASES } from "@/data/trex";
 
@@ -402,9 +403,8 @@ function ArticleContent() {
           <div className="fail-grid">
             {FAILURE_CASES.map((f) => (
               <div className="fail-card" key={f.mode}>
-                <span className="fail-card__tag">{f.mode}</span>
-                <h4>{f.task}</h4>
-                <p>{f.text}</p>
+                <h4>{f.mode}</h4>
+                <p><strong>{f.task}.</strong> {f.text}</p>
               </div>
             ))}
           </div>
@@ -432,10 +432,10 @@ function ArticleContent() {
           <h2 id="citation">Citation</h2>
           <p>
             The T-Rex paper is available on{" "}
-            <a href="https://arxiv.org/html/2606.17055v1" rel="noopener noreferrer" target="_blank">arXiv</a>. BibTeX, the
-            dataset, and code will be posted here as they are released — feel free to link to{" "}
-            <a href="https://tactile-reactive-dexterous.github.io" rel="noopener noreferrer" target="_blank">tactile-reactive-dexterous.github.io</a>.
+            <a href="https://arxiv.org/abs/2606.17055" rel="noopener noreferrer" target="_blank">arXiv</a>. If you find
+            this work useful, please cite:
           </p>
+          <CitationBibtex />
           <p style={{ fontSize: 15, color: "var(--trex-muted)" }}>
             This project page is built on the open-source{" "}
             <a href="https://github.com/enpire-research/enpire-research.github.io" rel="noopener noreferrer" target="_blank">ENPIRE</a>{" "}

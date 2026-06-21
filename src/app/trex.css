@@ -785,6 +785,48 @@ body {
 }
 .img-lightbox__close:hover { background: rgba(255, 255, 255, 0.3); }
 
+/* ---- video control bar: progress fills the row -------------------------- */
+/* The template laid the control bar out as a fixed 3-column grid
+   (play · speed · progress). When a player has no speed button the progress
+   bar got stuck in the narrow speed column; flex + flex:1 makes the scrubber
+   span the full width whether or not a speed button is present. */
+.expandable-video-modal__controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.expandable-video-modal__progress-shell { flex: 1 1 auto; }
+
+/* ---- BibTeX citation block ---------------------------------------------- */
+.bibtex { position: relative; margin: 18px 0 0; }
+.bibtex pre {
+  margin: 0;
+  padding: 18px 20px;
+  background: #1a1714;
+  color: #f0ece5;
+  border: 1px solid var(--trex-line-strong);
+  border-radius: 12px;
+  font-family: var(--font-code), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 12.5px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.bibtex__copy {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.bibtex__copy:hover { background: rgba(255, 255, 255, 0.22); }
+
 /* ---- responsive ---------------------------------------------------------- */
 @media (max-width: 720px) {
   .demo-views { grid-template-columns: 1fr; }
