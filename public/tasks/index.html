@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-Rex Tasks — Tactile-Reactive Dexterous Manipulation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap">
+    <style>
+        :root {
+            --bg:           #ffffff;
+            --bg-soft:      #f7f8fa;
+            --text:         #1a1a1a;
+            --text-muted:   #555a63;
+            --text-faint:   #7a818c;
+            --border:       rgba(0,0,0,0.10);
+            --border-soft:  rgba(0,0,0,0.06);
+            --blue:         #003262;
+            --blue-soft:    rgba(0,50,98,0.06);
+            --gold:         #FDB515;
+            --gold-deep:    #C68B16;
+            --gold-soft:    rgba(253,181,21,0.10);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 6rem;  /* clear the fixed top nav when jumping */
+            /* Fluid type scale: 16px up to ~1400px viewports, growing to
+               21px at ~2400px so large displays don't render a tiny page.
+               All sizes are rem-based, so this scales the whole layout. */
+            font-size: clamp(16px, 0.5vw + 9px, 21px);
+        }
+
+        body {
+            font-family: 'Inter', 'Arial', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        a { color: inherit; }
+
+        /* ===== Header ===== */
+        .header-title {
+            position: fixed;
+            top: 2rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            z-index: 10;
+            color: var(--blue);
+            text-decoration: none;
+        }
+        /* T-Rex title is just a single text line; nudge it down so its
+           vertical center matches the taller logo block on the right. */
+        .header-left  { left: 3rem; top: 2.5rem; }
+        .header-right { right: 3rem; }
+
+        .header-logos { display: flex; align-items: center; gap: 1.5rem; }
+        .header-logo-link { display: block; }
+        .bair-logo, .nvidia-logo { display: block; height: 2.5rem; width: auto; }
+        .bair-logo { filter: invert(1) brightness(0.15); }
+
+        .top-gradient {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 110px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.7) 60%, transparent 100%);
+            z-index: 5; pointer-events: none;
+        }
+
+        /* ===== Top navigation ===== */
+        .nav-buttons {
+            /* top is offset up by ~padding-top of .nav-btn (0.6rem) so the
+               nav text baseline aligns with the .header-title text/logos. */
+            position: fixed; top: 1.9rem; left: 50%;
+            transform: translateX(-50%);
+            display: flex; gap: 1rem; z-index: 10;
+        }
+        .nav-btn {
+            /* Extra padding-bottom pushes the gold ::after underline a bit
+               further below the nav text so it doesn't crowd the baseline. */
+            padding: 0.6rem 1.5rem 1rem;
+            background: transparent; border: none;
+            color: var(--text); font-size: 1.1rem;
+            font-weight: 500; letter-spacing: 0.5px;
+            cursor: pointer; text-decoration: none;
+            display: inline-block; position: relative;
+            transition: color 0.3s ease; white-space: nowrap;
+        }
+        .nav-btn::after {
+            content: ''; position: absolute; bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 0; height: 3px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+        .nav-btn:hover { color: var(--blue); }
+        .nav-btn:hover::after { width: 100%; }
+        .nav-btn.active { color: var(--blue); }
+        .nav-btn.active::after { width: 100%; }
+
+        /* ===== Hero ===== */
+        .hero {
+            display: flex; align-items: flex-start;
+            padding: 8rem 10% 2rem;
+            position: relative;
+        }
+        .hero-inner { display: flex; align-items: flex-start; }
+        .vertical-bar {
+            width: 0.625rem; height: 9rem;
+            background: var(--gold);
+            margin-right: 2rem;
+        }
+        .hero-title {
+            font-size: 2.7rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+            color: var(--text);
+        }
+        .hero-title .accent {
+            display: block;
+            color: var(--blue);
+            font-size: 3.6rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            line-height: 1.1;
+        }
+        .hero-subtitle {
+            font-size: 1.1rem;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            color: var(--text-muted);
+            max-width: 51.25rem; /* 820px @16px root */
+            line-height: 1.75;
+        }
+
+        /* ===== Sections ===== */
+        .section {
+            max-width: 75rem; /* 1200px @16px root, scales with fluid type */
+            margin: 0 auto;
+            padding: 32px 40px 56px;
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+            color: var(--blue);
+            padding-left: 1rem;
+            border-left: 5px solid var(--gold);
+        }
+        .section-subtitle {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-faint);
+            margin-left: 1rem;
+            margin-bottom: 1.2rem;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+        .section-content {
+            font-size: 1.02rem;
+            line-height: 1.75;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            max-width: 57.5rem; /* 920px @16px root */
+        }
+
+        /* Gold center-fading hairline between task groups */
+        .section-divider {
+            max-width: 75rem; /* 1200px @16px root, scales with fluid type */
+            margin: 1.5rem auto;
+            padding: 0 40px;
+        }
+        .section-divider hr {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(
+                to right,
+                transparent 0%,
+                rgba(253, 181, 21, 0.45) 50%,
+                transparent 100%
+            );
+            margin: 0;
+        }
+
+        /* ===== Sticky table of contents (left rail) =====
+           Fixed-position rail anchored to the viewport left margin. It only
+           shows on wide screens — below 1600px there isn't enough room next
+           to the centered 75rem content area (which itself grows with the
+           fluid root font size), so we hide it. */
+        .task-toc {
+            position: fixed;
+            top: 7rem;
+            left: 1.25rem;
+            width: 180px;
+            max-height: calc(100vh - 9rem);
+            overflow-y: auto;
+            padding: 0.9rem 0.95rem;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+            z-index: 4;
+            font-size: 0.82rem;
+        }
+        .task-toc-title {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: var(--text-faint);
+            text-align: center;
+            margin-bottom: 0.65rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-soft);
+        }
+        .task-toc-group { margin-bottom: 0.7rem; }
+        .task-toc-group:last-child { margin-bottom: 0; }
+        .task-toc-group-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--blue);
+            border-left: 3px solid var(--gold);
+            padding-left: 0.45rem;
+            margin: 0 0 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .task-toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .task-toc li { margin: 0; }
+        .task-toc a {
+            display: grid;
+            grid-template-columns: 28px 1fr;
+            gap: 0.45rem;
+            padding: 0.2rem 0.4rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.15s ease, color 0.15s ease;
+            line-height: 1.3;
+        }
+        .task-toc a:hover {
+            color: var(--blue);
+            background: var(--blue-soft);
+        }
+        .task-toc a.active {
+            color: var(--blue);
+            background: var(--gold-soft);
+            font-weight: 600;
+        }
+        .task-toc .toc-num {
+            color: var(--gold-deep);
+            font-weight: 600;
+            text-align: right;
+        }
+
+        @media (max-width: 1600px) {
+            .task-toc { display: none; }
+        }
+
+        /* ===== Task cards ===== */
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .task-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+        }
+        .task-card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
+        }
+        .task-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.1rem 1.5rem;
+            background: var(--bg-soft);
+            border-bottom: 1px solid var(--border-soft);
+        }
+        .task-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 2.5rem; /* 40px @16px root */
+            height: 2.125rem;  /* 34px */
+            padding: 0 0.6rem;
+            border-radius: 6px;
+            background: transparent;
+            border: 1.5px solid var(--gold);
+            color: var(--blue);
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+        .task-name {
+            color: var(--blue);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0;
+            flex: 1;
+            min-width: 0;
+        }
+        .task-body {
+            display: grid;
+            grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+            gap: 1.75rem;
+            padding: 1.5rem;
+        }
+
+        /* ===== Demo video placeholder ===== */
+        .task-video {
+            display: flex;
+            flex-direction: column;
+        }
+        .task-video-placeholder,
+        .task-video video {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            background: var(--bg-soft);
+        }
+        /* The head-view demo clips are cropped to 390x270 (13:9), so let
+           the video box follow that ratio instead of the 16:9 placeholder
+           default — avoids pillarboxing bars on the sides. */
+        .task-video video {
+            aspect-ratio: 13 / 9;
+        }
+        .task-video-placeholder {
+            border: 1.5px dashed var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-faint);
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 1rem;
+        }
+        .task-video-caption {
+            margin-top: 0.6rem;
+            text-align: center;
+            color: var(--text-faint);
+            font-size: 0.82rem;
+        }
+
+        /* ===== Task text content ===== */
+        .task-text { display: flex; flex-direction: column; gap: 1.1rem; }
+
+        .task-instruction {
+            position: relative;
+            padding: 0.85rem 1rem 0.85rem 1.05rem;
+            background: var(--bg-soft);
+            border-left: 3px solid var(--gold);
+            border-radius: 0 6px 6px 0;
+            color: var(--text);
+            font-style: italic;
+            font-size: 0.95rem;
+            line-height: 1.65;
+        }
+        .task-instruction::before {
+            content: 'Instruction';
+            display: block;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 0.72rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--gold-deep);
+            margin-bottom: 0.3rem;
+        }
+
+        .task-rubric {
+            border-top: 1px solid var(--border-soft);
+            padding-top: 1rem;
+        }
+        .task-rubric h4 {
+            color: var(--blue);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.65rem;
+        }
+        .rubric-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+        .rubric-list li {
+            display: grid;
+            grid-template-columns: 56px 32px 1fr;
+            column-gap: 0.6rem;
+            align-items: baseline;
+            font-size: 0.9rem;
+            line-height: 1.55;
+            color: var(--text);
+        }
+        .rubric-list.progress li {
+            grid-template-columns: 56px 1fr;
+        }
+        .rubric-score {
+            font-family: 'SFMono-Regular', 'Consolas', 'Menlo', monospace;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--gold-deep);
+            background: var(--gold-soft);
+            padding: 0.12rem 0.5rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .rubric-label {
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.88rem;
+        }
+
+        /* ===== Footer ===== */
+        .footer {
+            max-width: 75rem; /* 1200px @16px root, scales with fluid type */
+            margin: 0 auto;
+            padding: 40px 40px 60px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-faint);
+            font-size: 0.9rem;
+        }
+        .footer a {
+            color: var(--blue); text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+        .footer a:hover { border-bottom-color: var(--gold); }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 900px) {
+            .task-body { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .header-title { font-size: 1rem; top: 1.5rem; }
+            .header-left { left: 1.5rem; }
+            .header-right { right: 1.5rem; }
+            .nav-buttons {
+                top: 4.5rem; left: 0; transform: none;
+                width: 100%; padding: 0 1rem; gap: 0.4rem;
+                justify-content: center; flex-wrap: wrap;
+            }
+            .nav-btn { padding: 0.4rem 0.8rem; font-size: 0.9rem; }
+            .hero { padding: 7rem 5% 1rem; align-items: flex-start; }
+            .vertical-bar { height: 6rem; margin-right: 1rem; }
+            .hero-title { font-size: 1.6rem; }
+            .hero-title .accent { font-size: 2.3rem; }
+            .hero-subtitle { font-size: 1rem; }
+            .section { padding: 24px 20px 40px; }
+            .section-title { font-size: 1.6rem; }
+            .task-header { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-gradient"></div>
+
+    <a href="../" class="header-title header-left">T-Rex</a>
+    <div class="header-title header-right header-logos">
+        <a class="header-logo-link" href="https://bair.berkeley.edu/" target="_blank" rel="noopener noreferrer" aria-label="Berkeley AI Research">
+            <img src="../logos/BAIR_Logo_White_BearOnly.svg" alt="BAIR" class="bair-logo">
+        </a>
+        <a class="header-logo-link" href="https://research.nvidia.com/labs/gear/" target="_blank" rel="noopener noreferrer" aria-label="NVIDIA GEAR Lab">
+            <img src="../logos/NVIDIA_eye_green.svg" alt="NVIDIA" class="nvidia-logo">
+        </a>
+    </div>
+
+    <nav class="nav-buttons">
+        <a href="../" class="nav-btn">Home</a>
+        <a href="../#abstract" class="nav-btn">Paper Details</a>
+        <a href="../#dataset" class="nav-btn">Dataset</a>
+        <a href="./" class="nav-btn active">Tasks</a>
+        <a href="#" class="nav-btn" target="_blank" rel="noopener noreferrer">arXiv</a>
+        <a href="#" class="nav-btn" target="_blank" rel="noopener noreferrer">Code</a>
+    </nav>
+
+    <!-- ===== Hero ===== -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="vertical-bar"></div>
+            <div>
+                <h1 class="hero-title">
+                    <span class="accent">T-Rex Tasks</span>
+                    12 Tactile-Reactive<br>Dexterous Manipulation Tasks
+                </h1>
+                <p class="hero-subtitle">
+                    A real-world suite of 12 contact-rich dexterous manipulation
+                    tasks, spanning behaviors that require precise regulation of
+                    contact forces, behaviors that depend on sensing physical
+                    deformation invisible to vision alone, and behaviors that combine
+                    the two in longer bimanual sequences. Each task is evaluated with
+                    one of two rubrics: an <em>additive</em> rubric awarding partial
+                    credit for each completed sub-step, or a <em>progress-based</em>
+                    rubric scoring how far the robot advanced along a predefined
+                    success hierarchy.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Sticky TOC (desktop only) ===== -->
+    <aside class="task-toc" aria-label="Task navigation">
+        <div class="task-toc-title">Tasks</div>
+        <div class="task-toc-group">
+            <ul>
+                <li><a href="#task-1"><span class="toc-num">I</span><span>Flip Page</span></a></li>
+                <li><a href="#task-2"><span class="toc-num">II</span><span>Transfer Egg</span></a></li>
+                <li><a href="#task-3"><span class="toc-num">III</span><span>Wipe Plate</span></a></li>
+                <li><a href="#task-4"><span class="toc-num">IV</span><span>Apply Toothpaste</span></a></li>
+                <li><a href="#task-5"><span class="toc-num">V</span><span>Split Cup</span></a></li>
+                <li><a href="#task-6"><span class="toc-num">VI</span><span>Sort Mahjong</span></a></li>
+                <li><a href="#task-7"><span class="toc-num">VII</span><span>Open Lock</span></a></li>
+                <li><a href="#task-8"><span class="toc-num">VIII</span><span>Refill Tablet</span></a></li>
+                <li><a href="#task-9"><span class="toc-num">IX</span><span>Acid-Base Neutralization</span></a></li>
+                <li><a href="#task-10"><span class="toc-num">X</span><span>Extract Card</span></a></li>
+                <li><a href="#task-11"><span class="toc-num">XI</span><span>Deal Poker</span></a></li>
+                <li><a href="#task-12"><span class="toc-num">XII</span><span>Screw Lightbulb</span></a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- ===== Tasks ===== -->
+    <section class="section" id="tasks">
+        <div class="task-list">
+
+            <!-- Task I: Flip Page -->
+            <article class="task-card" id="task-1">
+                <header class="task-header">
+                    <span class="task-num">I</span>
+                    <h3 class="task-name">Flip Page</h3>
+                </header>
+                <div class="task-body">
+                    <div class="task-video">
+                        <video src="https://huggingface.co/datasets/Beakerman0101/trex-visualizer/resolve/main/task_videos/flip_page_head_2x.mp4" muted autoplay loop playsinline preload="metadata"></video>
+                    </div>
+                    <div class="task-text">
+                        <div class="task-instruction">
+                            &ldquo;Turn a page of the book from right to left using your right index
+                            finger.&rdquo;
+                        </div>
+                        <div class="task-rubric">
+                            <h4>Grading Rubric (Additive)</h4>
+                            <ul class="rubric-list">
+                                <li><span class="rubric-score">+0.3</span><span class="rubric-label">(a)</span>Successfully touched the book page with a single finger.</li>
+                                <li><span class="rubric-score">+0.3</span><span class="rubric-label">(b)</span>Using the index finger turn the page up.</li>
+                                <li><span class="rubric-score">+0.4</span><span class="rubric-label">(c)</span>Successfully flips exactly one page from right to left and smooths it flat.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Task II: Transfer Egg -->
+            <article class="task-card" id="task-2">
+                <header class="task-header">
+                    <span class="task-num">II</span>
+                    <h3 class="task-name">Transfer Egg</h3>
+                </header>
+                <div class="task-body">
+                    <div class="task-video">
+                        <video src="https://huggingface.co/datasets/Beakerman0101/trex-visualizer/resolve/main/task_videos/transfer_egg_head_2x.mp4" muted autoplay loop playsinline preload="metadata"></video>
+                    </div>
+                    <div class="task-text">
+                        <div class="task-instruction">
+                            &ldquo;Using the right thumb and index finger, pick up the egg from the
+                            green egg tray and place it into the yellow egg tray.&rdquo;
+                        </div>
+                        <div class="task-rubric">
+                            <h4>Grading Rubric (Additive)</h4>
+                            <ul class="rubric-list">
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(a)</span>Approaches the egg and makes contact without knocking it off the table.</li>
+                                <li><span class="rubric-score">+0.3</span><span class="rubric-label">(b)</span>Lifts the egg off the table without cracking it.</li>
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(c)</span>Transports the egg above the yellow container.</li>
+                                <li><span class="rubric-score">+0.3</span><span class="rubric-label">(d)</span>Releases the egg inside the container intact.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Task III: Wipe Plate -->
+            <article class="task-card" id="task-3">
+                <header class="task-header">
+                    <span class="task-num">III</span>
+                    <h3 class="task-name">Wipe Plate</h3>
+                </header>
+                <div class="task-body">
+                    <div class="task-video">
+                        <video src="https://huggingface.co/datasets/Beakerman0101/trex-visualizer/resolve/main/task_videos/wipe_plate_head_2x.mp4" muted autoplay loop playsinline preload="metadata"></video>
+                    </div>
+                    <div class="task-text">
+                        <div class="task-instruction">
+                            &ldquo;There is a white plate and a white cloth on the table; the white
+                            plate has colored stains on it. Use your right hand to pick up the cloth,
+                            hold the plate steady with your left hand, and then use the cloth to wipe
+                            away the stains.&rdquo;
+                        </div>
+                        <div class="task-rubric">
+                            <h4>Grading Rubric (Additive)</h4>
+                            <ul class="rubric-list">
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(a)</span>Right hand grasps the rag.</li>
+                                <li><span class="rubric-score">+0.1</span><span class="rubric-label">(b)</span>Left hand presses down on the plate to hold it steady.</li>
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(c)</span>Brings the rag into contact with the plate surface.</li>
+                                <li><span class="rubric-score">+0.4</span><span class="rubric-label">(d)</span>Wipes the plate until the design is fully removed (no visible ink remaining).</li>
+                                <li><span class="rubric-score">+0.1</span><span class="rubric-label">(e)</span>Places the rag back on the table and releases the plate.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Task IV: Apply Toothpaste -->
+            <article class="task-card" id="task-4">
+                <header class="task-header">
+                    <span class="task-num">IV</span>
+                    <h3 class="task-name">Apply Toothpaste</h3>
+                </header>
+                <div class="task-body">
+                    <div class="task-video">
+                        <video src="https://huggingface.co/datasets/Beakerman0101/trex-visualizer/resolve/main/task_videos/apply_toothpaste_head_2x.mp4" muted autoplay loop playsinline preload="metadata"></video>
+                    </div>
+                    <div class="task-text">
+                        <div class="task-instruction">
+                            &ldquo;On the left side of the countertop sits a cup holding a toothbrush,
+                            while an open tube of toothpaste rests on the right. Pick up the toothbrush
+                            with your left hand and the toothpaste with your right, squeeze some
+                            toothpaste onto the brush, and then set the tube back down.&rdquo;
+                        </div>
+                        <div class="task-rubric">
+                            <h4>Grading Rubric (Additive)</h4>
+                            <ul class="rubric-list">
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(a)</span>Grasps the toothbrush.</li>
+                                <li><span class="rubric-score">+0.1</span><span class="rubric-label">(b)</span>Grasps the toothpaste tube.</li>
+                                <li><span class="rubric-score">+0.4</span><span class="rubric-label">(c)</span>Dispenses a bead of toothpaste onto the bristles.</li>
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(d)</span>Returns the toothbrush upright into its holder.</li>
+                                <li><span class="rubric-score">+0.1</span><span class="rubric-label">(e)</span>Places the toothpaste tube back on the table.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+
+            <!-- Task V: Split Cup -->
+            <article class="task-card" id="task-5">
+                <header class="task-header">
+                    <span class="task-num">V</span>
+                    <h3 class="task-name">Split Cup</h3>
+                </header>
+                <div class="task-body">
+                    <div class="task-video">
+                        <video src="https://huggingface.co/datasets/Beakerman0101/trex-visualizer/resolve/main/task_videos/split_cup_head_2x.mp4" muted autoplay loop playsinline preload="metadata"></video>
+                    </div>
+                    <div class="task-text">
+                        <div class="task-instruction">
+                            &ldquo;A stack of red plastic cups sits on the desktop; use the right hand
+                            to slide out the topmost one, exerting effort to separate it from the
+                            rest of the stack.&rdquo;
+                        </div>
+                        <div class="task-rubric">
+                            <h4>Grading Rubric (Additive)</h4>
+                            <ul class="rubric-list">
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(a)</span>Left hand grasps and stabilizes the cup stack.</li>
+                                <li><span class="rubric-score">+0.3</span><span class="rubric-label">(b)</span>Right hand grasps the topmost cup of the stack.</li>
+                                <li><span class="rubric-score">+0.3</span><span class="rubric-label">(c)</span>Right hand twists and separates exactly one cup from the stack.</li>
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(d)</span>Right hand holds the single separated cup intact.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Task VI: Sort Mahjong -->
+            <article class="task-card" id="task-6">
+                <header class="task-header">
+                    <span class="task-num">VI</span>
+                    <h3 class="task-name">Sort Mahjong</h3>
+                </header>
+                <div class="task-body">
+                    <div class="task-video">
+                        <video src="https://huggingface.co/datasets/Beakerman0101/trex-visualizer/resolve/main/task_videos/sort_mahjong_head_2x.mp4" muted autoplay loop playsinline preload="metadata"></video>
+                    </div>
+                    <div class="task-text">
+                        <div class="task-instruction">
+                            &ldquo;Three boxes are placed on the table, representing the Mahjong tiles
+                            &lsquo;Red Zhong&rsquo;, &lsquo;Green Fa&rsquo;, and &lsquo;White
+                            Blank&rsquo;, respectively. In the center of the table lies a single
+                            Mahjong tile, placed face-down. Now, using your right hand, grasp the tile
+                            and discern its pattern; then, use your left hand to open the box
+                            corresponding to that pattern and place the tile inside.&rdquo;
+                        </div>
+                        <div class="task-rubric">
+                            <h4>Grading Rubric (Additive)</h4>
+                            <ul class="rubric-list">
+                                <li><span class="rubric-score">+0.1</span><span class="rubric-label">(a)</span>Right hand picks up the face-down mahjong tile.</li>
+                                <li><span class="rubric-score">+0.5</span><span class="rubric-label">(b)</span>Left hand slides open the lid of the correct compartment.</li>
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(c)</span>Right hand places the tile into the correct compartment.</li>
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(d)</span>Right thumb closes the compartment lid.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Task VII: Open Lock -->
+            <article class="task-card" id="task-7">
+                <header class="task-header">
+                    <span class="task-num">VII</span>
+                    <h3 class="task-name">Open Lock</h3>
+                </header>
+                <div class="task-body">
+                    <div class="task-video">
+                        <video src="https://huggingface.co/datasets/Beakerman0101/trex-visualizer/resolve/main/task_videos/open_lock_head_2x.mp4" muted autoplay loop playsinline preload="metadata"></video>
+                    </div>
+                    <div class="task-text">
+                        <div class="task-instruction">
+                            &ldquo;On the left side of the desk lies a red book, atop which rests a
+                            gray key; on the right side is a lock. Using your left thumb and index
+                            finger, slide the key free; then, pick up the lock with your right hand
+                            and use the key to unlock it.&rdquo;
+                        </div>
+                        <div class="task-rubric">
+                            <h4>Grading Rubric (Additive)</h4>
+                            <ul class="rubric-list">
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(a)</span>Grasps the key.</li>
+                                <li><span class="rubric-score">+0.1</span><span class="rubric-label">(b)</span>Grasps the padlock.</li>
+                                <li><span class="rubric-score">+0.4</span><span class="rubric-label">(c)</span>Aligns and inserts the key into the keyhole.</li>
+                                <li><span class="rubric-score">+0.3</span><span class="rubric-label">(d)</span>Rotates the key and successfully opens the lock.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Task VIII: Refill Tablet -->
+            <article class="task-card" id="task-8">
+                <header class="task-header">
+                    <span class="task-num">VIII</span>
+                    <h3 class="task-name">Refill Tablet</h3>
+                </header>
+                <div class="task-body">
+                    <div class="task-video">
+                        <video src="https://huggingface.co/datasets/Beakerman0101/trex-visualizer/resolve/main/task_videos/refill_tablet_head_2x.mp4" muted autoplay loop playsinline preload="metadata"></video>
+                    </div>
+                    <div class="task-text">
+                        <div class="task-instruction">
+                            &ldquo;Use your left hand to open one of the compartments in the small box,
+                            use your right hand to grasp the small ball on the table, place the ball
+                            into the box, and then close the box.&rdquo;
+                        </div>
+                        <div class="task-rubric">
+                            <h4>Grading Rubric (Additive)</h4>
+                            <ul class="rubric-list">
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(a)</span>Left index finger presses the compartment button to unlock the lid.</li>
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(b)</span>Left thumb flips the lid open.</li>
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(c)</span>Right hand picks up the ball.</li>
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(d)</span>Right hand places the ball into the open compartment.</li>
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(e)</span>Right thumb presses the lid closed.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+
+            <!-- Task IX -->
+            <article class="task-card" id="task-9">
+                <header class="task-header">
+                    <span class="task-num">IX</span>
+                    <h3 class="task-name">Acid-Base Neutralization</h3>
+                </header>
+                <div class="task-body">
+                    <div class="task-video">
+                        <video src="https://huggingface.co/datasets/Beakerman0101/trex-visualizer/resolve/main/task_videos/acid_base_head_2x.mp4" muted autoplay loop playsinline preload="metadata"></video>
+                    </div>
+                    <div class="task-text">
+                        <div class="task-instruction">
+                            &ldquo;On the right side of the desktop stands an Erlenmeyer flask
+                            containing 200&nbsp;mL of citric acid solution; on the left is a beaker
+                            holding 20&nbsp;mL of NaOH solution, which includes bromothymol blue
+                            indicator — appearing blue due to its alkaline nature. Using your right
+                            hand, pick up the dropper and draw up approximately 5&nbsp;mL of the acid
+                            solution; then, using your left hand to hold the beaker, perform an
+                            acid-base titration until the liquid in the beaker turns green or
+                            yellow.&rdquo;
+                        </div>
+                        <div class="task-rubric">
+                            <h4>Grading Rubric (Additive)</h4>
+                            <ul class="rubric-list">
+                                <li><span class="rubric-score">+0.1</span><span class="rubric-label">(a)</span>Right hand grasps the dropper from the conical flask.</li>
+                                <li><span class="rubric-score">+0.15</span><span class="rubric-label">(b)</span>Right hand aspirates liquid from the conical flask.</li>
+                                <li><span class="rubric-score">+0.1</span><span class="rubric-label">(c)</span>Left hand picks up the beaker.</li>
+                                <li><span class="rubric-score">+0.15</span><span class="rubric-label">(d)</span>Right hand dispenses liquid from the dropper into the beaker.</li>
+                                <li><span class="rubric-score">+0.15</span><span class="rubric-label">(e)</span>Left hand swirls the beaker to mix the contents.</li>
+                                <li><span class="rubric-score">+0.15</span><span class="rubric-label">(f)</span>The solution in the beaker fully transitions from blue to colorless.</li>
+                                <li><span class="rubric-score">+0.1</span><span class="rubric-label">(g)</span>Right hand returns the dropper to the conical flask.</li>
+                                <li><span class="rubric-score">+0.1</span><span class="rubric-label">(h)</span>Left hand places the beaker back on the table.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Task X: Extract Card -->
+            <article class="task-card" id="task-10">
+                <header class="task-header">
+                    <span class="task-num">X</span>
+                    <h3 class="task-name">Extract Card</h3>
+                </header>
+                <div class="task-body">
+                    <div class="task-video">
+                        <video src="https://huggingface.co/datasets/Beakerman0101/trex-visualizer/resolve/main/task_videos/extract_card_head_2x.mp4" muted autoplay loop playsinline preload="metadata"></video>
+                    </div>
+                    <div class="task-text">
+                        <div class="task-instruction">
+                            &ldquo;Next to the cube on the table lies a card case containing two
+                            cards. Pick up the case with the left hand, then use the right thumb to
+                            slide the cards out through the central opening; subsequently, use the
+                            right thumb and index finger to slide out the first card, taking care not
+                            to pull out the second one.&rdquo;
+                        </div>
+                        <div class="task-rubric">
+                            <h4>Grading Rubric (Additive)</h4>
+                            <ul class="rubric-list">
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(a)</span>Left hand picks up and holds the card sleeve.</li>
+                                <li><span class="rubric-score">+0.3</span><span class="rubric-label">(b)</span>Right thumb rubs the cards partially out of the sleeve.</li>
+                                <li><span class="rubric-score">+0.3</span><span class="rubric-label">(c)</span>Right thumb and index finger push the bottom card in.</li>
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(d)</span>Right hand extracts the single top card from the sleeve.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Task XI: Deal Poker -->
+            <article class="task-card" id="task-11">
+                <header class="task-header">
+                    <span class="task-num">XI</span>
+                    <h3 class="task-name">Deal Poker</h3>
+                </header>
+                <div class="task-body">
+                    <div class="task-video">
+                        <video src="https://huggingface.co/datasets/Beakerman0101/trex-visualizer/resolve/main/task_videos/deal_poker_head_2x.mp4" muted autoplay loop playsinline preload="metadata"></video>
+                    </div>
+                    <div class="task-text">
+                        <div class="task-instruction">
+                            &ldquo;Pick up a stack of playing cards with your right hand, then
+                            transfer it to your left; hold the stack aloft with your left hand, use
+                            your right thumb to slide out the top card, grasp it, and place it into
+                            the card holder.&rdquo;
+                        </div>
+                        <div class="task-rubric">
+                            <h4>Grading Rubric (Additive)</h4>
+                            <ul class="rubric-list">
+                                <li><span class="rubric-score">+0.1</span><span class="rubric-label">(a)</span>Right hand grasps the card stack from above.</li>
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(b)</span>Right hand transfers the stack to the left hand (handover).</li>
+                                <li><span class="rubric-score">+0.3</span><span class="rubric-label">(c)</span>Right thumb flicks and adjusts until exactly one card protrudes from the top.</li>
+                                <li><span class="rubric-score">+0.3</span><span class="rubric-label">(d)</span>Right hand successfully grasps the single protruding card.</li>
+                                <li><span class="rubric-score">+0.1</span><span class="rubric-label">(e)</span>Right hand inserts the card vertically into the card slot.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Task XII: Screw Lightbulb -->
+            <article class="task-card" id="task-12">
+                <header class="task-header">
+                    <span class="task-num">XII</span>
+                    <h3 class="task-name">Screw Lightbulb</h3>
+                </header>
+                <div class="task-body">
+                    <div class="task-video">
+                        <video src="https://huggingface.co/datasets/Beakerman0101/trex-visualizer/resolve/main/task_videos/screw_lightbulb_head_2x.mp4" muted autoplay loop playsinline preload="metadata"></video>
+                    </div>
+                    <div class="task-text">
+                        <div class="task-instruction">
+                            &ldquo;There is a lightbulb and a base on the desktop. Use your left hand
+                            to pick up the lightbulb and transfer it to your right hand; then, use
+                            your left hand to hold down the base while using your right hand to screw
+                            the lightbulb into the base until it lights up.&rdquo;
+                        </div>
+                        <div class="task-rubric">
+                            <h4>Grading Rubric (Additive)</h4>
+                            <ul class="rubric-list">
+                                <li><span class="rubric-score">+0.1</span><span class="rubric-label">(a)</span>Left hand picks up the lightbulb.</li>
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(b)</span>Left hand transfers the bulb to the right hand (handover).</li>
+                                <li><span class="rubric-score">+0.1</span><span class="rubric-label">(c)</span>Left hand stabilizes the lamp socket.</li>
+                                <li><span class="rubric-score">+0.4</span><span class="rubric-label">(d)</span>Right hand aligns the bulb and rotates continuously to engage the threads.</li>
+                                <li><span class="rubric-score">+0.2</span><span class="rubric-label">(e)</span>Bulb is fully seated and the lamp illuminates.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>
+            T-Rex Tasks &middot; Berkeley AI Research &middot;
+            <a href="../#demos">Back to project page</a>
+        </p>
+    </footer>
+
+    <script>
+    // Highlight the active TOC entry as the user scrolls past each task card.
+    // We use IntersectionObserver with a rootMargin biased toward the upper
+    // third of the viewport — that's the "reading zone", so whichever card is
+    // currently centered there wins the active state.
+    (function () {
+        const tocLinks = document.querySelectorAll('.task-toc a');
+        if (tocLinks.length === 0) return;
+
+        const linkById = new Map();
+        tocLinks.forEach(link => {
+            const id = link.getAttribute('href').slice(1);
+            linkById.set(id, link);
+        });
+
+        const cards = document.querySelectorAll('.task-card[id]');
+        let visible = new Set();
+
+        const observer = new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+                if (entry.isIntersecting) visible.add(entry.target.id);
+                else visible.delete(entry.target.id);
+            }
+            // Pick the topmost visible task (smallest numeric suffix).
+            const ids = [...visible].sort((a, b) => {
+                const na = parseInt(a.replace('task-', ''), 10);
+                const nb = parseInt(b.replace('task-', ''), 10);
+                return na - nb;
+            });
+            tocLinks.forEach(l => l.classList.remove('active'));
+            if (ids.length > 0) {
+                const link = linkById.get(ids[0]);
+                if (link) link.classList.add('active');
+            }
+        }, { rootMargin: '-20% 0px -55% 0px' });
+
+        cards.forEach(card => observer.observe(card));
+    })();
+    </script>
+</body>
+</html>

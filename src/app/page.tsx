@@ -7,7 +7,6 @@ import TrexHero from "@/components/TrexHero";
 import TactileWaveBackground from "@/components/TactileWaveBackground";
 import DemoGallery from "@/components/DemoGallery";
 import { AblationBars, ResultsBars, ResultsTable } from "@/components/ResultsChart";
-import DataEfficiencyCurve from "@/components/DataEfficiencyCurve";
 import { FAILURE_CASES } from "@/data/trex";
 
 const outlineItems: { href: string; label: string; level?: number }[] = [
@@ -24,7 +23,6 @@ const outlineItems: { href: string; label: string; level?: number }[] = [
   { href: "#results", label: "Results" },
   { href: "#per-task", label: "Per-task results", level: 2 },
   { href: "#ablations", label: "Ablations", level: 2 },
-  { href: "#data-efficiency", label: "Data efficiency", level: 2 },
   { href: "#failures", label: "Failure cases" },
   { href: "#related", label: "Related work" },
   { href: "#limitations", label: "Limitations" },
@@ -405,6 +403,7 @@ function ArticleContent() {
             execute it; click the video to expand it.
           </p>
           <DemoGallery />
+          <a className="ds-open" href="tasks/">Browse all 12 tasks in detail →</a>
 
           {/* ---- Results ---- */}
           <h2 id="results">Results</h2>
@@ -433,13 +432,6 @@ function ArticleContent() {
             encoder, the asynchronous cascade, and both training stages each contribute measurably.
           </p>
           <AblationBars figureNumber={5} />
-
-          <h3 className="article-subsection" id="data-efficiency">Data efficiency</h3>
-          <p>
-            Because tactile capabilities are acquired in mid-training, far fewer downstream demonstrations are needed to
-            reach a given success level — the gain is largest exactly in the low-data regime.
-          </p>
-          <DataEfficiencyCurve figureNumber={6} />
 
           {/* ---- Failure cases ---- */}
           <h2 id="failures">Failure cases</h2>
@@ -493,13 +485,14 @@ function ArticleContent() {
           {/* ---- Citation ---- */}
           <h2 id="citation">Citation</h2>
           <p>
-            The paper and BibTeX will be released soon. In the meantime, please link back to{" "}
+            T-Rex is under active development. The paper, BibTeX, dataset, and code will be posted on this page as they
+            are released — please check back, and feel free to link to{" "}
             <a href="https://tactile-reactive-dexterous.github.io" rel="noopener noreferrer" target="_blank">tactile-reactive-dexterous.github.io</a>.
           </p>
           <p style={{ fontSize: 15, color: "var(--trex-muted)" }}>
-            Project page adapted to the{" "}
+            This project page is built on the open-source{" "}
             <a href="https://github.com/enpire-research/enpire-research.github.io" rel="noopener noreferrer" target="_blank">ENPIRE</a>{" "}
-            project-page template.
+            project-page template — many thanks to its authors.
           </p>
         </article>
       </div>
