@@ -26,14 +26,33 @@ const DURATION = 7000; // ms for the bar to fill 0 -> 100%, then stop (no auto-r
 export default function TeaserAnimation() {
   const [progress, setProgress] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [started, setStarted] = useState(false);
   const progressRef = useRef(0);
+  const figureRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     progressRef.current = progress;
   }, [progress]);
 
+  // Only kick off the light-up once the figure scrolls into view.
   useEffect(() => {
-    if (paused) return;
+    const el = figureRef.current;
+    if (!el || started) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setStarted(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.35 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [started]);
+
+  useEffect(() => {
+    if (!started || paused) return;
     let raf = 0;
     const start = performance.now() - progressRef.current * DURATION;
     const tick = (t: number) => {
@@ -47,7 +66,7 @@ export default function TeaserAnimation() {
     };
     raf = window.requestAnimationFrame(tick);
     return () => window.cancelAnimationFrame(raf);
-  }, [paused]);
+  }, [started, paused]);
 
   const lit = (i: number) => progress >= (i + 1) / N - 0.0001;
   let activeIdx = -1;
@@ -55,7 +74,7 @@ export default function TeaserAnimation() {
   const caption = activeIdx < 0 ? "The full T-Rex pipeline — watch each stage light up." : REGIONS[activeIdx].name;
 
   return (
-    <figure className="trex-figure">
+    <figure className="trex-figure" ref={figureRef}>
       <div className="trex-fig-controls">
         <button className="trex-btn" onClick={() => setPaused((p) => !p)} type="button">
           {paused ? <Play size={14} /> : <Pause size={14} />} {paused ? "Play" : "Pause"}
