@@ -71,10 +71,7 @@
 /* ---- animated teaser: pale base + per-region full-colour reveals --------- */
 .teaser-anim {
   position: relative;
-  /* ↓↓ 整体缩放旋钮：调这个百分比即可让整张 teaser 等比变小/变大（居中）。
-     100% = 占满正文宽；92% = 缩小一点、两边留白。 */
-  width: 92%;
-  margin-inline: auto;
+  width: 100%;
   aspect-ratio: 4800 / 2795; /* teaser.png native ratio (clean v6 PDF render) → deterministic box */
   border: 1px solid var(--trex-line);
   border-radius: 12px;
@@ -89,13 +86,15 @@
 .teaser-anim__base,
 .teaser-anim__region {
   position: absolute;
-  /* breathing room so the figure's edges aren't clipped — more on the right
-     and bottom (inset: top right bottom left). */
-  inset: 0% 0% 0% 0%;
+  inset: 0;
   width: auto;
   height: auto;
   object-fit: fill;
   display: block;
+  /* ↓↓ 内容缩放旋钮：把图像内容整体缩小、居中，四周匀出等量白边（边框不动）。
+     0.95 = 缩到 95%，四周各留 ~2.5% 白；想更小白边更多就调小，如 0.92。 */
+  transform: scale(0.95);
+  transform-origin: center;
 }
 .teaser-anim__base { opacity: 0.4; }
 .teaser-anim__region { transition: opacity 0.7s ease; }
