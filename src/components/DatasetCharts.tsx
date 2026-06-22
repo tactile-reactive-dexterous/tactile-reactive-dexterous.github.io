@@ -333,11 +333,11 @@ function ObjectBarsChart() {
 
   const n = OBJECT_BARS.length;
   const W = 1400;
-  const H = 384;
+  const H = 240;  // flatter chart (shorter bars)
   const ml = 50;  // left margin (y-axis + label)
   const mr = 8;
-  const mt = 14;  // small top margin (category labels now sit INSIDE the bands)
-  const mb = 96;  // bottom margin for rotated per-object labels
+  const mt = 10;  // small top margin (category labels sit INSIDE the bands)
+  const mb = 60;  // bottom margin: just fits the rotated per-object labels (no extra white gap)
   const plotW = W - ml - mr;
   const plotH = H - mt - mb;
   const baseline = mt + plotH;
@@ -365,7 +365,7 @@ function ObjectBarsChart() {
               <rect x={x0} y={mt} width={r3(x1 - x0)} height={r3(baseline - mt)} fill={sp.color} opacity={0.12} />
               <text
                 x={r3((x0 + x1) / 2)}
-                y={mt + 14}
+                y={r3(mt + plotH * 0.2)}
                 textAnchor="middle"
                 fill={darken(sp.color)}
                 style={{ fontSize: 10.5, fontWeight: 700 }}
