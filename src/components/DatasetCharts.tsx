@@ -13,12 +13,16 @@ import { useInView } from "@/lib/useInView";
 
 const TOTAL_HOURS = CATEGORY_DURATION.reduce((s, c) => s + c.hours, 0);
 
-type Tip = { x: number; y: number; title: string; line: string; swatch: string } | null;
+type Tip = { x: number; y: number; flipX?: boolean; title: string; line: string; swatch: string } | null;
 
 function Tooltip({ tip }: { tip: Tip }) {
   if (!tip) return null;
   return (
-    <div className="dc-tip" style={{ left: tip.x, top: tip.y }} role="status">
+    <div
+      className="dc-tip"
+      style={{ left: tip.x, top: tip.y, transform: `translate(${tip.flipX ? "-100%" : "0"}, -100%)` }}
+      role="status"
+    >
       <div className="dc-tip__title">{tip.title}</div>
       <div className="dc-tip__row">
         <i style={{ background: tip.swatch }} /> {tip.line}
@@ -27,9 +31,14 @@ function Tooltip({ tip }: { tip: Tip }) {
   );
 }
 
-function tipPos(e: React.MouseEvent, pad = 14) {
+// Position the tooltip relative to the chart box; near the right edge it grows
+// leftward (flipX) so it never spills past the right side (e.g. the unscrew bar).
+function tipPos(e: React.MouseEvent) {
   const box = (e.currentTarget.closest(".dc-chart") as HTMLElement).getBoundingClientRect();
-  return { x: e.clientX - box.left + pad, y: e.clientY - box.top + pad };
+  const rx = e.clientX - box.left;
+  const ry = e.clientY - box.top;
+  const flipX = rx > box.width - 180;
+  return { x: flipX ? rx - 14 : rx + 14, y: ry + 14, flipX };
 }
 
 // Round every coordinate written into an SVG attribute to a fixed precision so
@@ -76,7 +85,13 @@ function PieChart() {
         setTip(null);
       }}
     >
-      <svg viewBox="0 0 260 260" className="dc-pie__svg" role="img" aria-label="Demonstration time per task category">
+      <svg
+        viewBox="0 0 260 260"
+        className="dc-pie__svg"
+        role="img"
+        aria-label="Demonstration time per task category"
+        onMouseLeave={() => { setActive(null); setTip(null); }}
+      >
         <g
           className="dc-pie__g"
           style={{ transform: inView ? "scale(1)" : "scale(0.6)", opacity: inView ? 1 : 0, transformOrigin: "center" }}
@@ -97,7 +112,7 @@ function PieChart() {
                   onMouseEnter={(e) => {
                     setActive(i);
                     const p = tipPos(e);
-                    setTip({ x: p.x, y: p.y, title: s.name, line: `${s.hours.toFixed(2)} h · ${s.pct.toFixed(1)}%`, swatch: s.color });
+                    setTip({ ...p, title: s.name, line: `${s.hours.toFixed(2)} h · ${s.pct.toFixed(1)}%`, swatch: s.color });
                   }}
                   onMouseMove={(e) => { const p = tipPos(e); setTip((t) => (t ? { ...t, ...p } : t)); }}
                 />
@@ -231,7 +246,13 @@ function BarsChart() {
 
   return (
     <div className="dc-chart dc-bars" ref={ref} onMouseLeave={() => { setActive(null); setTip(null); }}>
-      <svg viewBox={`0 0 ${W} ${H}`} className="dc-bars__svg" role="img" aria-label="Demonstration hours per motion primitive">
+      <svg
+        viewBox={`0 0 ${W} ${H}`}
+        className="dc-bars__svg"
+        role="img"
+        aria-label="Demonstration hours per motion primitive"
+        onMouseLeave={() => { setActive(null); setTip(null); }}
+      >
         {/* y grid + ticks */}
         {[0, 2, 4, 6].map((g) => (
           <g key={g}>
@@ -266,7 +287,7 @@ function BarsChart() {
                 onMouseEnter={(e) => {
                   setActive(i);
                   const p = tipPos(e);
-                  setTip({ x: p.x, y: p.y, title: v.verb, line: `${v.hours.toFixed(2)} h`, swatch: blueFor(i, n) });
+                  setTip({ ...p, title: v.verb, line: `${v.hours.toFixed(2)} h`, swatch: blueFor(i, n) });
                 }}
                 onMouseMove={(e) => { const p = tipPos(e); setTip((t) => (t ? { ...t, ...p } : t)); }}
               />

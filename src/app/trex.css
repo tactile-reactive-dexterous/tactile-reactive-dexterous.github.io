@@ -818,11 +818,15 @@ body {
   cursor: pointer;
 }
 .dc-modal__close:hover { border-color: var(--trex-gold); }
-/* enlarge the chart contents inside the modal */
-.dc-modal .dc-pie__svg { max-width: 460px; }
+/* enlarge the chart contents inside the modal — proportionally larger than the
+   inline version (bigger pie, roomier legend with matching font + row spacing) */
+.dc-modal .dc-pie { gap: 34px; }
+.dc-modal .dc-pie__svg { width: 56%; max-width: 480px; }
+.dc-modal .dc-legend { gap: 9px 18px; line-height: 1.3; }
 .dc-modal .dc-legend,
-.dc-modal .dc-legend li { font-size: 15px; }
-.dc-modal .dc-legend i { width: 12px; height: 12px; }
+.dc-modal .dc-legend li { font-size: 19px; }
+.dc-modal .dc-legend i { width: 16px; height: 16px; border-radius: 3px; }
+.dc-modal .dc-tip { font-size: 15px; }
 .dc-tip {
   position: absolute;
   z-index: 5;
