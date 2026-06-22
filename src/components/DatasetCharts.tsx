@@ -97,7 +97,7 @@ export function CategoryPie() {
                     const p = tipPos(e);
                     setTip({ x: p.x, y: p.y, title: s.name, line: `${s.hours.toFixed(2)} h · ${s.pct.toFixed(1)}%`, swatch: s.color });
                   }}
-                  onMouseMove={(e) => setTip((t) => (t ? { ...t, ...tipPos(e) } : t))}
+                  onMouseMove={(e) => { const p = tipPos(e); setTip((t) => (t ? { ...t, ...p } : t)); }}
                 />
                 <text x={lbl.x} y={lbl.y} className="dc-pie__pct" textAnchor="middle" dominantBaseline="central">
                   {s.pct.toFixed(1)}%
@@ -192,7 +192,7 @@ export function VerbBars() {
                   const p = tipPos(e);
                   setTip({ x: p.x, y: p.y, title: v.verb, line: `${v.hours.toFixed(2)} h`, swatch: blueFor(i, n) });
                 }}
-                onMouseMove={(e) => setTip((t) => (t ? { ...t, ...tipPos(e) } : t))}
+                onMouseMove={(e) => { const p = tipPos(e); setTip((t) => (t ? { ...t, ...p } : t)); }}
               />
               <text
                 className="dc-bars__xtick"
