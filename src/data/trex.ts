@@ -247,26 +247,34 @@ export const FAILURE_CASES = [
 // ---- Dataset composition charts (values from the v10 dataset-summary run, the
 // same data behind the static category_duration_pie / verb_frequency PNGs). ----
 
-// Demonstration hours per task category (success-only). Colours mirror the
-// pastel palette of the original pie figure. Order = descending by hours.
+// Demonstration hours per task category (success-only). All 10 values are
+// EXACT — printed verbatim by the v10 run ("Containers 7.23 h", ...) and their
+// shares reproduce the published pie (Containers/Wrapping 14.0%, Fabric 13.3%,
+// Paper 12.3%, Electronics 9.7%, Toys 8.6%, Personal Care 7.9%, Hardware 7.5%,
+// Clothing 6.7%, Kitchen 6.0%). Order = the figure's own _PIE_ORDER; colours
+// mirror the pastel palette of the original pie.
 export type CategorySlice = { name: string; hours: number; color: string };
 export const CATEGORY_DURATION: CategorySlice[] = [
-  { name: "Containers", hours: 7.23, color: "#7b8fd4" },
-  { name: "Wrapping & Tape", hours: 7.19, color: "#aacf5a" },
-  { name: "Fabric & Cloth", hours: 6.85, color: "#9b8fd0" },
-  { name: "Paper & Writing", hours: 6.33, color: "#c9a8d8" },
-  { name: "Electronics", hours: 5.0, color: "#5cb85c" },
-  { name: "Toys", hours: 4.43, color: "#efb45a" },
   { name: "Personal Care", hours: 4.07, color: "#e8918c" },
   { name: "Hardware & Tools", hours: 3.86, color: "#8fbfe0" },
-  { name: "Clothing", hours: 3.43, color: "#e87ab0" },
+  { name: "Toys", hours: 4.43, color: "#efb45a" },
   { name: "Kitchen", hours: 3.06, color: "#4fb0a5" },
+  { name: "Wrapping & Tape", hours: 7.19, color: "#aacf5a" },
+  { name: "Electronics", hours: 5.0, color: "#5cb85c" },
+  { name: "Fabric & Cloth", hours: 6.85, color: "#9b8fd0" },
+  { name: "Clothing", hours: 3.43, color: "#e87ab0" },
+  { name: "Containers", hours: 7.23, color: "#7b8fd4" },
+  { name: "Paper & Writing", hours: 6.33, color: "#c9a8d8" },
 ];
 
-// Demonstration hours per motion primitive (success-only), descending. Top 15
-// are exact from the run; the 7-verb tail is reconstructed to the printed
-// "Others = 8.34 h" total and the published bar heights.
-export type VerbHours = { verb: string; hours: number };
+// Demonstration hours per motion primitive (success-only), descending.
+// The first 15 are EXACT — printed verbatim by the v10 run. The 7-verb tail
+// (disassemble … unscrew) is NOT printed individually anywhere (the run lumps
+// it into "Others = 8.34 h"), so each tail value is MEASURED off the published
+// verb_frequency_chart_hours.png: bar pixel-heights calibrated at 110.2 px/h by
+// linear fit to the 15 exact bars (which the fit reproduces to ±0.01 h). The
+// tail sums to 8.25 h vs the printed 8.34 h — agreement within pixel rounding.
+export type VerbHours = { verb: string; hours: number; measured?: boolean };
 export const VERB_HOURS: VerbHours[] = [
   { verb: "wrap", hours: 6.11 },
   { verb: "lift and place", hours: 5.47 },
@@ -283,11 +291,11 @@ export const VERB_HOURS: VerbHours[] = [
   { verb: "twist", hours: 1.76 },
   { verb: "shake", hours: 1.66 },
   { verb: "dispense", hours: 1.6 },
-  { verb: "disassemble", hours: 1.46 },
-  { verb: "squeeze", hours: 1.42 },
-  { verb: "pour", hours: 1.34 },
-  { verb: "open", hours: 1.26 },
-  { verb: "close", hours: 1.1 },
-  { verb: "screw", hours: 1.04 },
-  { verb: "unscrew", hours: 0.72 },
+  { verb: "disassemble", hours: 1.44, measured: true },
+  { verb: "squeeze", hours: 1.42, measured: true },
+  { verb: "pour", hours: 1.34, measured: true },
+  { verb: "open", hours: 1.29, measured: true },
+  { verb: "close", hours: 1.05, measured: true },
+  { verb: "screw", hours: 1.02, measured: true },
+  { verb: "unscrew", hours: 0.69, measured: true },
 ];

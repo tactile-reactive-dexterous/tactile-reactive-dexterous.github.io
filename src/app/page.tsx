@@ -10,7 +10,7 @@ import TeaserAnimation from "@/components/TeaserAnimation";
 import CitationBibtex from "@/components/CitationBibtex";
 import { AblationBars, ResultsBars, ResultsTable } from "@/components/ResultsChart";
 import { CategoryPie, VerbBars } from "@/components/DatasetCharts";
-import { FAILURE_CASES } from "@/data/trex";
+import FailureExplorer from "@/components/FailureExplorer";
 
 const outlineItems: { href: string; label: string; level?: number }[] = [
   { href: "#article-title", label: "Title" },
@@ -426,20 +426,7 @@ function ArticleContent() {
           {/* ---- Failure cases ---- */}
           <h2 id="failures">Failure cases</h2>
           <p>Six recurring failure modes point to where tactile-reactive dexterity still has headroom:</p>
-          <div className="fail-grid">
-            {FAILURE_CASES.map((f) => (
-              <div className="fail-card" key={f.mode}>
-                <h4>{f.mode}</h4>
-                <p><strong>{f.task}.</strong> {f.text}</p>
-              </div>
-            ))}
-          </div>
-          <figure className="trex-figure">
-            <ZoomableImage className="fig-img" src="/figures/fail_case.jpg" alt="T-Rex representative failure cases" width={2101} height={2076} />
-            <figcaption>
-              Representative failure cases — the red boxes highlight the contact issue behind each failure mode.
-            </figcaption>
-          </figure>
+          <FailureExplorer />
 
           {/* ---- Limitations ---- */}
           <h2 id="limitations">Limitations &amp; future directions</h2>

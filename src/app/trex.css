@@ -72,7 +72,7 @@
 .teaser-anim {
   position: relative;
   width: 100%;
-  aspect-ratio: 4060 / 2393; /* teaser.png native ratio → deterministic box */
+  aspect-ratio: 4800 / 2795; /* teaser.png native ratio (clean v6 PDF render) → deterministic box */
   border: 1px solid var(--trex-line);
   border-radius: 12px;
   overflow: hidden;
@@ -621,6 +621,77 @@
 .fail-card h4 { margin: 0 0 6px; font-family: var(--font-heading); font-weight: 500; font-size: 17px; }
 .fail-card p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--trex-muted); }
 
+/* Interactive failure explorer: cards select a mode, viewer shows its filmstrip */
+.fail-explorer { margin: 30px 0 0; }
+.fail-grid--interactive { margin-top: 0; }
+.fail-grid--interactive .fail-card {
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  background: #fff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+.fail-grid--interactive .fail-card:hover,
+.fail-grid--interactive .fail-card[data-active="true"] {
+  border-color: var(--trex-gold);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+.fail-grid--interactive .fail-card[data-active="true"] { transform: translateY(-1px); }
+.fail-stage { margin-top: 20px; }
+.fail-stage__bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--trex-ink);
+}
+.fail-stage__arrow {
+  flex: 1;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--trex-gold-bright), rgba(242, 168, 30, 0.15));
+  position: relative;
+}
+.fail-stage__arrow::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left: 9px solid var(--trex-gold-bright);
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+}
+.fail-stage__img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid var(--trex-line);
+  border-radius: 8px;
+}
+
+/* ---- large-screen adaptiveness: widen the column and scale text up so big
+   monitors don't render everything tiny (13" laptops are unchanged). Figures,
+   charts and videos are width:100% of the shell, so widening it scales them. */
+@media (min-width: 1500px) {
+  .article-shell { width: min(1120px, 92%); }
+  .figure-page .article-shell p,
+  .figure-page .article-shell li { font-size: 21px; }
+}
+@media (min-width: 1800px) {
+  .article-shell { width: min(1280px, 90%); }
+  .figure-page .article-shell p,
+  .figure-page .article-shell li { font-size: 22px; }
+}
+@media (min-width: 2200px) {
+  .article-shell { width: min(1440px, 88%); }
+  .figure-page .article-shell p,
+  .figure-page .article-shell li { font-size: 23px; }
+}
+
 /* ============================================================================
    Layout overrides — T-Rex doesn't use the template's right-hand margin-note
    gutter, so collapse the article grid to a CENTERED [TOC + content] layout
@@ -696,42 +767,51 @@ body {
   display: inline-block;
 }
 
-/* Pie */
+/* Pie — wedges on the left, compact legend on the right (matches the figure) */
 .dc-pie {
   display: flex;
   align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-  justify-content: center;
+  gap: 18px;
+  flex-wrap: nowrap;
 }
 .dc-pie__svg {
-  width: 230px;
-  max-width: 60%;
+  width: 56%;
+  max-width: 250px;
   height: auto;
+  flex: 0 0 auto;
 }
 .dc-pie__g {
-  transform-origin: center;
   transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease;
 }
+.dc-pie__slice-g {
+  transition: transform 0.18s ease;
+}
 .dc-pie__slice {
-  transform-origin: center;
-  transition: transform 0.18s ease, opacity 0.18s ease, filter 0.18s ease;
+  transition: opacity 0.18s ease, filter 0.18s ease;
   cursor: pointer;
 }
 .dc-pie__slice:hover {
-  filter: brightness(1.08);
+  filter: brightness(1.07);
 }
 .dc-pie__slice[data-dim="true"] {
-  opacity: 0.45;
+  opacity: 0.4;
+}
+.dc-pie__pct {
+  fill: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  pointer-events: none;
+  paint-order: stroke;
 }
 .dc-legend {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 4px 12px;
+  gap: 5px 14px;
   font-size: 13px;
-  color: var(--trex-ink, #222);
+  font-weight: 600;
+  color: var(--trex-ink, #1a1a1a);
 }
 .dc-legend li {
   display: flex;
@@ -741,7 +821,7 @@ body {
   transition: opacity 0.15s ease;
 }
 .dc-legend li[data-dim="true"] {
-  opacity: 0.45;
+  opacity: 0.4;
 }
 .dc-legend i {
   width: 12px;
@@ -750,78 +830,41 @@ body {
   flex: 0 0 auto;
 }
 
-/* Bars */
-.dc-bars {
-  padding-left: 6px;
+/* Bars — single responsive SVG with axes, gradient bars, rotated tick labels */
+.dc-bars__svg {
+  width: 100%;
+  height: auto;
 }
-.dc-bars__plot {
-  position: relative;
-  display: flex;
-  height: 230px;
+.dc-bars__grid {
+  stroke: rgba(0, 0, 0, 0.07);
+  stroke-width: 1;
 }
-.dc-bars__yaxis {
-  position: relative;
-  width: 18px;
-  flex: 0 0 auto;
+.dc-bars__axis {
+  stroke: rgba(0, 0, 0, 0.35);
+  stroke-width: 1;
+}
+.dc-bars__ytick {
+  fill: var(--trex-muted, #666);
   font-size: 11px;
-  color: var(--trex-muted, #666);
 }
-.dc-bars__yaxis span {
-  position: absolute;
-  right: 2px;
-  transform: translateY(50%);
+.dc-bars__ytitle {
+  fill: var(--trex-muted, #555);
+  font-size: 12px;
+  font-weight: 600;
 }
-.dc-bars__cols {
-  flex: 1;
-  display: flex;
-  align-items: flex-end;
-  gap: 2px;
-  border-left: 1px solid rgba(0, 0, 0, 0.18);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.18);
-  padding: 0 2px;
+.dc-bars__xtick {
+  fill: var(--trex-muted, #555);
+  font-size: 11px;
 }
-.dc-bars__col {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
+.dc-bars__bar {
   cursor: pointer;
-  transition: opacity 0.15s ease;
+  transition: y 0.7s cubic-bezier(0.22, 1, 0.36, 1), height 0.7s cubic-bezier(0.22, 1, 0.36, 1), filter 0.15s ease;
+}
+.dc-bars__bar:hover {
+  filter: brightness(1.12);
 }
 .dc-bars__col[data-dim="true"] {
   opacity: 0.4;
-}
-.dc-bars__bar-wrap {
-  flex: 1;
-  width: 100%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-.dc-bars__bar {
-  width: 78%;
-  border-radius: 2px 2px 0 0;
-  transition: height 0.7s cubic-bezier(0.22, 1, 0.36, 1), filter 0.15s ease;
-}
-.dc-bars__col:hover .dc-bars__bar {
-  filter: brightness(1.12);
-}
-.dc-bars__label {
-  font-size: 9.5px;
-  color: var(--trex-muted, #555);
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  margin-top: 4px;
-  white-space: nowrap;
-  max-height: 70px;
-  overflow: hidden;
-}
-.dc-bars__ytitle {
-  font-size: 11px;
-  color: var(--trex-muted, #666);
-  margin-top: 2px;
-  padding-left: 22px;
 }
 
 /* Author names link to their homepages: inherit the author colour, reveal a
@@ -922,28 +965,28 @@ body {
   opacity: 0;
   transition: background 0.25s ease, opacity 0.25s ease;
 }
-/* match the visualizer's own accent (Berkeley navy --blue #003262 / hover #00254a) */
+/* gold accent (matches the tactile-rex visualizer's gold buttons) */
 .ds-preview__overlay span {
   padding: 10px 20px;
   border-radius: 10px;
-  background: #003262;
-  color: #fff;
+  background: var(--trex-gold-bright);
+  color: #1a1714;
   font-weight: 700;
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
 }
-.ds-preview:hover .ds-preview__overlay { background: rgba(0, 50, 98, 0.2); opacity: 1; }
+.ds-preview:hover .ds-preview__overlay { background: rgba(242, 168, 30, 0.22); opacity: 1; }
 .ds-open {
   display: inline-flex;
   margin-top: 14px;
   padding: 10px 18px;
   border-radius: 10px;
-  background: #003262;
-  color: #fff;
+  background: var(--trex-gold-bright);
+  color: #1a1714;
   font-weight: 700;
   text-decoration: none;
-  transition: transform 0.15s ease, background 0.15s ease;
+  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
 }
-.ds-open:hover { transform: translateY(-1px); background: #00254a; }
+.ds-open:hover { transform: translateY(-1px); background: var(--trex-gold); color: #fff; box-shadow: 0 8px 22px rgba(185, 119, 12, 0.32); }
 
 /* ---- dataset statistic charts (doorman composition layout) --------------- */
 .chart-grid {
