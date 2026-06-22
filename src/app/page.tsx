@@ -11,6 +11,7 @@ import CitationBibtex from "@/components/CitationBibtex";
 import { AblationBars, ResultsBars, ResultsTable } from "@/components/ResultsChart";
 import { CategoryPie, VerbBars } from "@/components/DatasetCharts";
 import FailureExplorer from "@/components/FailureExplorer";
+import TrexLineFigure, { SPLIT_STEP_PANELS, DATA_EFFICIENCY_PANELS, DATA_EFFICIENCY_LEGEND } from "@/components/TrexLineCharts";
 
 const outlineItems: { href: string; label: string; level?: number }[] = [
   { href: "#article-title", label: "Title" },
@@ -422,6 +423,44 @@ function ArticleContent() {
             encoder, the asynchronous cascade, and both training stages each contribute measurably.
           </p>
           <AblationBars figureNumber={5} />
+
+          <p>
+            We also sweep the <strong>cascaded denoising split step</strong> <em>K</em><sub>slow</sub>. An intermediate
+            split is best across all three contact-rich tasks: too small a split leaves the action expert with too few
+            visuomotor priors for the tactile expert to refine, while too large a split starves the tactile expert of
+            capacity to fold in feedback.
+          </p>
+          <TrexLineFigure
+            ariaLabel="Ablation on cascaded denoising split steps"
+            panels={SPLIT_STEP_PANELS}
+            xAxisLabel="Denoise Split Step"
+            caption={
+              <>
+                Figure 6: Ablation on the cascaded denoising split step <em>K</em><sub>slow</sub> — success rate (%) vs.
+                split step for three representative tasks. An intermediate split consistently wins. Hover any point for
+                its value; drag the bar to scrub.
+              </>
+            }
+          />
+
+          <p>
+            Finally, T-Rex is markedly <strong>more data-efficient</strong>. With tactile-grounded mid-training (blue),
+            success climbs far faster as post-training demonstrations grow than training from scratch without
+            mid-training (green) — the gap is largest in the low-data regime.
+          </p>
+          <TrexLineFigure
+            ariaLabel="Data efficiency of T-Rex"
+            panels={DATA_EFFICIENCY_PANELS}
+            legend={DATA_EFFICIENCY_LEGEND}
+            xAxisLabel="Number of post-training trajectories"
+            caption={
+              <>
+                Figure 7: Data efficiency — success rate (%) vs. number of post-training trajectories, with (blue) and
+                without (green) T-Rex tactile mid-training. Hover a point for its value; click a legend entry to isolate
+                a curve.
+              </>
+            }
+          />
 
           {/* ---- Failure cases ---- */}
           <h2 id="failures">Failure cases</h2>

@@ -749,6 +749,48 @@ body {
   white-space: normal;
   overflow-wrap: break-word;
 }
+/* ---- animated line figures (split-step ablation, data efficiency) ------- */
+.trexlc-figure { width: 100%; margin: 46px 0 0; }
+.trexlc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+@media (max-width: 760px) {
+  .trexlc-grid { grid-template-columns: 1fr; }
+}
+.trexlc-panel { position: relative; }
+.trexlc-panel .aeb-svg { width: 100%; height: auto; display: block; }
+.trexlc-xlabel {
+  margin-top: 4px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--trex-muted);
+}
+.trexlc-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 12px;
+}
+.trexlc-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--trex-ink);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.trexlc-legend__item[data-dim="true"] { opacity: 0.4; }
+
 /* ---- interactive dataset charts (pie + verb bars) ----------------------- */
 .dc-chart {
   position: relative;
