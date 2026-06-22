@@ -333,11 +333,11 @@ function ObjectBarsChart() {
 
   const n = OBJECT_BARS.length;
   const W = 1400;
-  const H = 300;
+  const H = 384;
   const ml = 50;  // left margin (y-axis + label)
   const mr = 8;
-  const mt = 26;  // top margin for category labels
-  const mb = 14;
+  const mt = 14;  // small top margin (category labels now sit INSIDE the bands)
+  const mb = 96;  // bottom margin for rotated per-object labels
   const plotW = W - ml - mr;
   const plotH = H - mt - mb;
   const baseline = mt + plotH;
@@ -365,10 +365,10 @@ function ObjectBarsChart() {
               <rect x={x0} y={mt} width={r3(x1 - x0)} height={r3(baseline - mt)} fill={sp.color} opacity={0.12} />
               <text
                 x={r3((x0 + x1) / 2)}
-                y={mt - 9}
+                y={mt + 14}
                 textAnchor="middle"
                 fill={darken(sp.color)}
-                style={{ fontSize: 10.5, fontWeight: 600 }}
+                style={{ fontSize: 10.5, fontWeight: 700 }}
               >
                 {sp.cat}
               </text>
@@ -376,12 +376,17 @@ function ObjectBarsChart() {
           );
         })}
         {/* y grid + ticks (log: 1, 10, 100) */}
-        {[1, 10, 100].map((g) => (
-          <g key={g}>
-            <line x1={ml} y1={yOf(g)} x2={W - mr} y2={yOf(g)} className="dc-bars__grid" />
-            <text x={ml - 7} y={yOf(g)} className="dc-bars__ytick" textAnchor="end" dominantBaseline="central">{g}</text>
-          </g>
-        ))}
+        {[0, 1, 2].map((exp) => {
+          const g = 10 ** exp;
+          return (
+            <g key={exp}>
+              <line x1={ml} y1={yOf(g)} x2={W - mr} y2={yOf(g)} className="dc-bars__grid" />
+              <text x={ml - 7} y={yOf(g)} className="dc-bars__ytick" textAnchor="end" dominantBaseline="central">
+                10<tspan dy={-4} style={{ fontSize: "72%" }}>{exp}</tspan>
+              </text>
+            </g>
+          );
+        })}
         {/* axes */}
         <line x1={ml} y1={mt} x2={ml} y2={baseline} className="dc-bars__axis" />
         <line x1={ml} y1={baseline} x2={W - mr} y2={baseline} className="dc-bars__axis" />
@@ -391,6 +396,7 @@ function ObjectBarsChart() {
         {/* bars */}
         {OBJECT_BARS.map((o, i) => {
           const x = r3(ml + i * slot + (slot - barW) / 2);
+          const xMid = r3(x + barW / 2);
           const topY = yOf(o.count);
           const full = r3(baseline - topY);
           return (
@@ -410,6 +416,14 @@ function ObjectBarsChart() {
                 }}
                 onMouseMove={(e) => { const p = tipPos(e); setTip((t) => (t ? { ...t, ...p } : t)); }}
               />
+              <text
+                className="dc-objbars__xtick"
+                transform={`translate(${xMid} ${baseline + 4}) rotate(-90)`}
+                textAnchor="end"
+                dominantBaseline="central"
+              >
+                {o.label}
+              </text>
             </g>
           );
         })}

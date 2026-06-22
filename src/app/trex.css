@@ -67,6 +67,10 @@
   border-radius: 12px;
   background: #fff;
 }
+/* The teaser uses <video class="fig-img">. A video element keeps its own
+   background in the letterbox area when fullscreened on a non-16:9 screen —
+   make that black (not the white card bg) so there are no white bars. */
+video.fig-img { background: #000; }
 
 /* ---- animated teaser: pale base + per-region full-colour reveals --------- */
 .teaser-anim {
@@ -1013,6 +1017,11 @@ body {
 .dc-bars__xtick {
   fill: var(--trex-muted, #555);
   font-size: 11px;
+}
+/* per-object names under the 210-bar long-tail chart: tiny, vertical */
+.dc-objbars__xtick {
+  fill: var(--trex-muted, #555);
+  font-size: 5.2px;
 }
 .dc-bars__bar {
   cursor: pointer;
