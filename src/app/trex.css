@@ -656,9 +656,10 @@
 }
 .fail-stage__arrow {
   flex: 1;
-  height: 3px;
+  height: 4px; /* line thickness */
   border-radius: 3px;
-  background: linear-gradient(90deg, var(--trex-gold-bright), rgba(242, 168, 30, 0.15));
+  /* fades from faint on the left to solid gold on the right (toward the head) */
+  background: linear-gradient(90deg, rgba(242, 168, 30, 0.12), var(--trex-gold-bright));
   position: relative;
   margin-top: 2px; /* vertical position of the arrow relative to the label */
 }
@@ -668,9 +669,9 @@
   right: -1px;
   top: 50%;
   transform: translateY(-50%);
-  border-left: 9px solid var(--trex-gold-bright);
-  border-top: 6px solid transparent;
-  border-bottom: 6px solid transparent;
+  border-left: 15px solid var(--trex-gold-bright); /* longer = stretched horizontally */
+  border-top: 5px solid transparent; /* smaller = flatter head */
+  border-bottom: 5px solid transparent;
 }
 /* fixed-aspect window that crops the full figure to the active row */
 .fail-stage__viewer {
