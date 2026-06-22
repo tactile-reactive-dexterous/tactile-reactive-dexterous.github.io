@@ -5,14 +5,27 @@ import ZoomableImage from "@/components/ZoomableImage";
 import { FAILURE_CASES } from "@/data/trex";
 
 // Interactive failure-case explorer: the six mode cards act as a selector;
-// hovering / clicking one swaps the viewer to that mode's execution filmstrip
-// (a row cropped from the original fail_case figure). Click the strip to
-// enlarge it in the lightbox. Card order matches the figure rows 1–6.
-const ROW_HEIGHTS = [345, 271, 323, 281, 271, 258];
+// hovering / clicking one crops the full fail_case figure to that mode's row.
+// Click the strip to open the whole figure in the lightbox.
+//
+// ↓↓ 裁剪参数（每个失败模式对应原图 fail_case.jpg 里的一行）：
+//    top / bottom 是该行在原图中的【上边界 / 下边界】像素（原图 2101×2076）。
+//    上面裁多了就把 top 调小；下面裁多了就把 bottom 调小。顺序对应卡片 1–6。
+const IMG_W = 2101;
+const IMG_H = 2076;
+const ROWS = [
+  { top: 60, bottom: 405 },    // 1 Object collision — Screw lightbulb
+  { top: 465, bottom: 736 },   // 2 Slipping off — Open lock
+  { top: 746, bottom: 1069 },  // 3 Imprecise position — Transfer egg
+  { top: 1121, bottom: 1402 }, // 4 Multi-finger friction — Sort mahjong
+  { top: 1468, bottom: 1739 }, // 5 Excessive force — Apply toothpaste
+  { top: 1818, bottom: 2076 }, // 6 Sliding misalignment — Extract card
+];
 
 export default function FailureExplorer() {
   const [active, setActive] = useState(0);
   const f = FAILURE_CASES[active];
+  const row = ROWS[active];
 
   return (
     <div className="fail-explorer">
@@ -38,14 +51,18 @@ export default function FailureExplorer() {
           Execution Progress
           <span className="fail-stage__arrow" aria-hidden="true" />
         </div>
-        <ZoomableImage
-          key={active}
-          className="fail-stage__img"
-          src={`/figures/failcases/row${active + 1}.png`}
-          alt={`${f.task} failure rollout — ${f.mode}`}
-          width={2101}
-          height={ROW_HEIGHTS[active]}
-        />
+        {/* The full figure is cropped to the active row by a fixed-aspect window
+            (overflow hidden) + a vertical shift; clicking opens the whole figure. */}
+        <div className="fail-stage__viewer" style={{ aspectRatio: `${IMG_W} / ${row.bottom - row.top}` }}>
+          <ZoomableImage
+            className="fail-stage__img"
+            src="/figures/fail_case.jpg"
+            alt={`${f.task} failure rollout — ${f.mode}`}
+            width={IMG_W}
+            height={IMG_H}
+            style={{ transform: `translateY(-${((row.top / IMG_H) * 100).toFixed(3)}%)` }}
+          />
+        </div>
         <figcaption>
           <strong>{f.mode}</strong> — {f.task}. The red box marks the contact issue behind the failure. Hover a card
           above to switch modes; click the strip to enlarge.

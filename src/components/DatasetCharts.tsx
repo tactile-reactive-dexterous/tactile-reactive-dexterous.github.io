@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { Maximize2, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { CATEGORY_DURATION, VERB_HOURS } from "@/data/trex";
 import { useInView } from "@/lib/useInView";
 
@@ -48,7 +50,7 @@ function arcPath(cx: number, cy: number, r: number, start: number, end: number) 
   return `M ${cx} ${cy} L ${s.x} ${s.y} A ${r} ${r} 0 ${largeArc} 1 ${e.x} ${e.y} Z`;
 }
 
-export function CategoryPie() {
+function PieChart() {
   const { ref, inView } = useInView<HTMLDivElement>(0.3);
   const [active, setActive] = useState<number | null>(null);
   const [tip, setTip] = useState<Tip>(null);
@@ -125,6 +127,80 @@ export function CategoryPie() {
   );
 }
 
+// --- Click-to-enlarge wrapper ----------------------------------------------
+// Renders the chart inline plus an "enlarge" button; clicking opens a centred
+// modal that grows out of the chart's original on-page position (FLIP-style
+// transform) and holds a FRESH chart instance — so all hover/tooltip
+// interactions keep working at the larger size.
+function Expandable({ label, render }: { label: string; render: () => React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [shown, setShown] = useState(false); // drives the open/close transition
+  const [from, setFrom] = useState({ dx: 0, dy: 0, s: 0.4 });
+  const frameRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  const openModal = () => {
+    const rect = frameRef.current?.getBoundingClientRect();
+    if (rect) {
+      setFrom({
+        dx: rect.left + rect.width / 2 - window.innerWidth / 2,
+        dy: rect.top + rect.height / 2 - window.innerHeight / 2,
+        s: Math.max(0.22, Math.min(0.6, rect.width / 760)),
+      });
+    }
+    setOpen(true);
+    setShown(false);
+    requestAnimationFrame(() => requestAnimationFrame(() => setShown(true)));
+  };
+  const close = () => {
+    setShown(false);
+    window.setTimeout(() => setOpen(false), 280);
+  };
+
+  return (
+    <div className="dc-frame" ref={frameRef}>
+      {render()}
+      <button className="dc-expand-btn" onClick={openModal} aria-label={`Enlarge ${label}`} type="button">
+        <Maximize2 size={15} strokeWidth={1.8} aria-hidden="true" />
+      </button>
+      {open && mounted
+        ? createPortal(
+            <div className="dc-modal" data-open={shown ? "true" : undefined} onClick={close} role="presentation">
+              <div
+                className="dc-modal__inner"
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  transform: shown
+                    ? "translate(0px, 0px) scale(1)"
+                    : `translate(${from.dx}px, ${from.dy}px) scale(${from.s})`,
+                  opacity: shown ? 1 : 0.4,
+                }}
+              >
+                <button className="dc-modal__close" onClick={close} aria-label="Close" type="button">
+                  <X size={20} strokeWidth={1.9} aria-hidden="true" />
+                </button>
+                {render()}
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
+    </div>
+  );
+}
+
+export function CategoryPie() {
+  return <Expandable label="task-category share" render={() => <PieChart />} />;
+}
+
 // --- Bars: demonstration hours per motion primitive ------------------------
 // Blue gradient: darkest for the tallest bar, lightest for the shortest
 // (matplotlib Blues 0.7 -> 0.3).
@@ -133,7 +209,7 @@ function blueFor(i: number, n: number) {
   return `hsl(212 64% ${34 + t * 46}%)`;
 }
 
-export function VerbBars() {
+function BarsChart() {
   const { ref, inView } = useInView<HTMLDivElement>(0.3);
   const [active, setActive] = useState<number | null>(null);
   const [tip, setTip] = useState<Tip>(null);
@@ -209,4 +285,8 @@ export function VerbBars() {
       <Tooltip tip={tip} />
     </div>
   );
+}
+
+export function VerbBars() {
+  return <Expandable label="motion-primitive hours" render={() => <BarsChart />} />;
 }

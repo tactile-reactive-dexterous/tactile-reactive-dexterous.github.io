@@ -11,11 +11,12 @@ type Props = {
   width: number;
   height: number;
   className?: string;
+  style?: React.CSSProperties;
 };
 
 // A figure image that opens a full-screen lightbox when clicked (click anywhere
 // outside / press Esc to close). Used for every static figure on the page.
-export default function ZoomableImage({ src, alt, width, height, className }: Props) {
+export default function ZoomableImage({ src, alt, width, height, className, style }: Props) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -37,7 +38,7 @@ export default function ZoomableImage({ src, alt, width, height, className }: Pr
         height={height}
         onClick={() => setOpen(true)}
         src={src}
-        style={{ cursor: "zoom-in" }}
+        style={{ cursor: "zoom-in", ...style }}
         unoptimized
         width={width}
       />
