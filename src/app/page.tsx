@@ -6,6 +6,7 @@ import { Fragment, useEffect, useState } from "react";
 import TrexHero from "@/components/TrexHero";
 import DemoGallery from "@/components/DemoGallery";
 import ZoomableImage from "@/components/ZoomableImage";
+import ScrollPlayVideo from "@/components/ScrollPlayVideo";
 import CitationBibtex from "@/components/CitationBibtex";
 import { AblationBars, ResultsBars, ResultsTable } from "@/components/ResultsChart";
 import { CategoryPie, VerbBars, ObjectFrequencyBars } from "@/components/DatasetCharts";
@@ -350,15 +351,7 @@ function ArticleContent() {
             </figcaption>
           </figure>
           <figure className="trex-figure">
-            <video
-              className="fig-img"
-              src="/figures/trex_architecture_live.mp4"
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="metadata"
-            />
+            <ScrollPlayVideo className="fig-img" src="/figures/trex_architecture_live.mp4" />
             <figcaption>The architecture in motion — the asynchronous cascaded flow-matching rollout.</figcaption>
           </figure>
           <p>
