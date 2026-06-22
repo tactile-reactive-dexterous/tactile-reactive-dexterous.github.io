@@ -21,8 +21,7 @@ const REGIONS = [
   { name: "Post-training tasks — contact-rich skills", clip: "inset(0% 0% 0% 77.6%)" },
 ];
 const N = REGIONS.length;
-const DURATION = 7000; // ms for the bar to fill 0 -> 100%
-const HOLD = 1500; // ms held at 100% before looping
+const DURATION = 7000; // ms for the bar to fill 0 -> 100%, then stop (no auto-replay)
 
 export default function TeaserAnimation() {
   const [progress, setProgress] = useState(0);
@@ -38,8 +37,12 @@ export default function TeaserAnimation() {
     let raf = 0;
     const start = performance.now() - progressRef.current * DURATION;
     const tick = (t: number) => {
-      const elapsed = (t - start) % (DURATION + HOLD);
-      setProgress(Math.min(1, elapsed / DURATION));
+      const raw = Math.min(1, (t - start) / DURATION);
+      setProgress(raw);
+      if (raw >= 1) {
+        setPaused(true); // play once to 100%, then stop — no auto-replay
+        return;
+      }
       raf = window.requestAnimationFrame(tick);
     };
     raf = window.requestAnimationFrame(tick);
