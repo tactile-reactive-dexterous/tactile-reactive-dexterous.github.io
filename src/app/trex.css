@@ -865,6 +865,9 @@ body {
   will-change: transform, opacity;
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
 }
+/* wide variant for the very-wide long-tail object chart: fill nearly the whole
+   viewport so enlarging actually makes it bigger than the on-page version. */
+.dc-modal__inner--wide { width: min(1700px, 97vw); }
 .dc-modal__close {
   position: absolute;
   top: 12px;
@@ -1021,7 +1024,7 @@ body {
 /* per-object names under the 210-bar long-tail chart: tiny, vertical */
 .dc-objbars__xtick {
   fill: var(--trex-muted, #555);
-  font-size: 5.2px;
+  font-size: 5px;
 }
 .dc-bars__bar {
   cursor: pointer;

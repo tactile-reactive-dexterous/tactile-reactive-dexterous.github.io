@@ -147,7 +147,7 @@ function PieChart() {
 // modal that grows out of the chart's original on-page position (FLIP-style
 // transform) and holds a FRESH chart instance — so all hover/tooltip
 // interactions keep working at the larger size.
-function Expandable({ label, render }: { label: string; render: () => React.ReactNode }) {
+function Expandable({ label, render, wide }: { label: string; render: () => React.ReactNode; wide?: boolean }) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [shown, setShown] = useState(false); // drives the open/close transition
@@ -165,10 +165,14 @@ function Expandable({ label, render }: { label: string; render: () => React.Reac
   const openModal = () => {
     const rect = frameRef.current?.getBoundingClientRect();
     if (rect) {
+      // Final modal width (must match the CSS below). Start the FLIP at the
+      // chart's CURRENT on-page size (rect.width / modalW) so it grows out from
+      // what you see, then ends LARGER than on-page.
+      const modalW = wide ? Math.min(1700, window.innerWidth * 0.97) : Math.min(900, window.innerWidth * 0.94);
       setFrom({
         dx: rect.left + rect.width / 2 - window.innerWidth / 2,
         dy: rect.top + rect.height / 2 - window.innerHeight / 2,
-        s: Math.max(0.22, Math.min(0.6, rect.width / 760)),
+        s: Math.max(0.15, Math.min(0.95, rect.width / modalW)),
       });
     }
     setOpen(true);
@@ -190,7 +194,7 @@ function Expandable({ label, render }: { label: string; render: () => React.Reac
         ? createPortal(
             <div className="dc-modal" data-open={shown ? "true" : undefined} onClick={close} role="presentation">
               <div
-                className="dc-modal__inner"
+                className={wide ? "dc-modal__inner dc-modal__inner--wide" : "dc-modal__inner"}
                 onClick={(e) => e.stopPropagation()}
                 style={{
                   transform: shown
@@ -337,7 +341,7 @@ function ObjectBarsChart() {
   const ml = 50;  // left margin (y-axis + label)
   const mr = 8;
   const mt = 10;  // small top margin (category labels sit INSIDE the bands)
-  const mb = 60;  // bottom margin: just fits the rotated per-object labels (no extra white gap)
+  const mb = 56;  // bottom margin: just fits the rotated per-object labels (no extra white gap)
   const plotW = W - ml - mr;
   const plotH = H - mt - mb;
   const baseline = mt + plotH;
@@ -434,5 +438,5 @@ function ObjectBarsChart() {
 }
 
 export function ObjectFrequencyBars() {
-  return <Expandable label="episodes per object" render={() => <ObjectBarsChart />} />;
+  return <Expandable label="episodes per object" wide render={() => <ObjectBarsChart />} />;
 }
