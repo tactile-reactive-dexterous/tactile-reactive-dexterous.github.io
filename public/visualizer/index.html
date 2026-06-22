@@ -386,7 +386,31 @@
             .topbar .subtitle { font-size: 0.85rem; }
             .display-note { padding: 0.55rem 1rem; font-size: 0.78rem; }
         }
+
+        /* ---- embed mode (?embed=1): chrome-less 4-column video wall used as
+               the home-page preview. The title bar, display note and filter
+               sidebar are hidden; the grid fills the frame as a 4-wide tile
+               wall. Toggled by the inline <head> script below. ---- */
+        .embed .topbar,
+        .embed .display-note,
+        .embed .sidebar { display: none !important; }
+        .embed .container { grid-template-columns: 1fr !important; padding: 0 !important; gap: 0 !important; height: 100vh; }
+        .embed .grid {
+            grid-template-columns: repeat(4, 1fr) !important;
+            grid-auto-rows: min-content;
+            align-content: start;
+            height: 100vh !important;
+            overflow: hidden !important;
+            padding: 0.4rem !important;
+            gap: 0.4rem !important;
+        }
+        .embed .card:hover { transform: none; border-color: var(--border-soft); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04); }
+        .embed .card .tooltip { display: none; }
     </style>
+    <script>
+        // Run before <body> parses so the chrome never flashes in the preview.
+        if (location.search.indexOf("embed") > -1) document.documentElement.classList.add("embed");
+    </script>
 </head>
 <body>
     <div class="topbar">

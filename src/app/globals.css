@@ -3494,6 +3494,12 @@ textarea {
 .learned-policy-modal__window,
 .expandable-video-modal__window {
   width: min(1180px, 100%);
+  /* Never taller than the viewport (minus the 34px modal padding top+bottom),
+     so the header and controls always stay on-screen; the video shrinks to
+     fit on short windows instead of overflowing past the edges. */
+  max-height: calc(100vh - 68px);
+  display: flex;
+  flex-direction: column;
   border: 1px solid rgba(255, 255, 255, 0.22);
   background: #050505;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
@@ -3556,6 +3562,8 @@ textarea {
   display: block;
   width: 100%;
   aspect-ratio: 16 / 9;
+  min-height: 0;
+  flex: 0 1 auto; /* may shrink to keep the whole window within the viewport */
   background: #000;
   object-fit: contain;
 }
@@ -3675,6 +3683,11 @@ textarea {
   .learned-policy-modal,
   .expandable-video-modal {
     padding: 16px;
+  }
+
+  .learned-policy-modal__window,
+  .expandable-video-modal__window {
+    max-height: calc(100vh - 32px);
   }
 
   .learned-policy-modal__controls,

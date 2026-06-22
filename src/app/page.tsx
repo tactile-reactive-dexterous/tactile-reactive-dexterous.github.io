@@ -9,6 +9,7 @@ import ZoomableImage from "@/components/ZoomableImage";
 import TeaserAnimation from "@/components/TeaserAnimation";
 import CitationBibtex from "@/components/CitationBibtex";
 import { AblationBars, ResultsBars, ResultsTable } from "@/components/ResultsChart";
+import { CategoryPie, VerbBars } from "@/components/DatasetCharts";
 import { FAILURE_CASES } from "@/data/trex";
 
 const outlineItems: { href: string; label: string; level?: number }[] = [
@@ -263,10 +264,10 @@ function ArticleContent() {
           <figure className="trex-figure">
             <div className="chart-grid">
               <div className="chart-cell">
-                <ZoomableImage src="/figures/category_duration_pie.png" alt="Share of demonstration time across task categories" width={1933} height={1380} />
+                <CategoryPie />
               </div>
               <div className="chart-cell">
-                <ZoomableImage src="/figures/verb_frequency_chart_hours.png" alt="Hours of data per motor primitive" width={2179} height={981} />
+                <VerbBars />
               </div>
               <div className="chart-cell chart-cell--object">
                 <ZoomableImage src="/figures/object_frequency_chart.png" alt="Demonstrations per object (long tail)" width={7466} height={1179} />
@@ -284,10 +285,29 @@ function ArticleContent() {
             Browse a 500-trajectory random subset, filter by object and motion primitive, and resample on demand — all
             in your browser. Click the preview to open the full interactive visualizer.
           </p>
+          {/* Previous preview: showed the visualizer EXACTLY as its own page
+              (title bar + filter sidebar + grid), scaled down. Kept here on
+              purpose — uncomment this block and remove the wall preview below
+              to restore that look. */}
+          {/*
           <a className="ds-preview" href="visualizer/" aria-label="Open the interactive dataset visualizer">
             <iframe
               className="ds-preview__frame"
               src="visualizer/"
+              title="T-Rex Dataset Visualizer preview"
+              loading="lazy"
+              tabIndex={-1}
+              aria-hidden="true"
+            />
+            <span className="ds-preview__overlay"><span>Open visualizer →</span></span>
+          </a>
+          */}
+          {/* Chrome-less 4-wide video wall (embed mode hides the title + sidebar);
+              still a link that opens the full visualizer. */}
+          <a className="ds-preview ds-preview--wall" href="visualizer/" aria-label="Open the interactive dataset visualizer">
+            <iframe
+              className="ds-preview__frame ds-preview__frame--embed"
+              src="visualizer/?embed=1"
               title="T-Rex Dataset Visualizer preview"
               loading="lazy"
               tabIndex={-1}

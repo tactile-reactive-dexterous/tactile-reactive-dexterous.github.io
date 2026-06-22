@@ -243,3 +243,51 @@ export const FAILURE_CASES = [
   { task: "Apply Toothpaste", mode: "Excessive force", text: "Too much paste is squeezed out and missed by the brush — overly forceful control on deformable objects." },
   { task: "Extract Card", mode: "Sliding misalignment", text: "Non-uniform force while sliding the card out, suggesting a need for stronger temporal tactile conditioning." },
 ];
+
+// ---- Dataset composition charts (values from the v10 dataset-summary run, the
+// same data behind the static category_duration_pie / verb_frequency PNGs). ----
+
+// Demonstration hours per task category (success-only). Colours mirror the
+// pastel palette of the original pie figure. Order = descending by hours.
+export type CategorySlice = { name: string; hours: number; color: string };
+export const CATEGORY_DURATION: CategorySlice[] = [
+  { name: "Containers", hours: 7.23, color: "#7b8fd4" },
+  { name: "Wrapping & Tape", hours: 7.19, color: "#aacf5a" },
+  { name: "Fabric & Cloth", hours: 6.85, color: "#9b8fd0" },
+  { name: "Paper & Writing", hours: 6.33, color: "#c9a8d8" },
+  { name: "Electronics", hours: 5.0, color: "#5cb85c" },
+  { name: "Toys", hours: 4.43, color: "#efb45a" },
+  { name: "Personal Care", hours: 4.07, color: "#e8918c" },
+  { name: "Hardware & Tools", hours: 3.86, color: "#8fbfe0" },
+  { name: "Clothing", hours: 3.43, color: "#e87ab0" },
+  { name: "Kitchen", hours: 3.06, color: "#4fb0a5" },
+];
+
+// Demonstration hours per motion primitive (success-only), descending. Top 15
+// are exact from the run; the 7-verb tail is reconstructed to the printed
+// "Others = 8.34 h" total and the published bar heights.
+export type VerbHours = { verb: string; hours: number };
+export const VERB_HOURS: VerbHours[] = [
+  { verb: "wrap", hours: 6.11 },
+  { verb: "lift and place", hours: 5.47 },
+  { verb: "grasp and lift", hours: 4.61 },
+  { verb: "fold", hours: 4.09 },
+  { verb: "cut", hours: 2.81 },
+  { verb: "reach", hours: 2.64 },
+  { verb: "insert", hours: 2.28 },
+  { verb: "press", hours: 2.17 },
+  { verb: "wipe", hours: 2.08 },
+  { verb: "peel", hours: 2.03 },
+  { verb: "assemble", hours: 1.96 },
+  { verb: "extract", hours: 1.84 },
+  { verb: "twist", hours: 1.76 },
+  { verb: "shake", hours: 1.66 },
+  { verb: "dispense", hours: 1.6 },
+  { verb: "disassemble", hours: 1.46 },
+  { verb: "squeeze", hours: 1.42 },
+  { verb: "pour", hours: 1.34 },
+  { verb: "open", hours: 1.26 },
+  { verb: "close", hours: 1.1 },
+  { verb: "screw", hours: 1.04 },
+  { verb: "unscrew", hours: 0.72 },
+];

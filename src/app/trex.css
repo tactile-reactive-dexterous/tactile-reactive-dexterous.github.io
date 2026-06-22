@@ -660,6 +660,170 @@ body {
   white-space: normal;
   overflow-wrap: break-word;
 }
+/* ---- interactive dataset charts (pie + verb bars) ----------------------- */
+.dc-chart {
+  position: relative;
+  width: 100%;
+}
+.dc-tip {
+  position: absolute;
+  z-index: 5;
+  transform: translateY(-100%);
+  pointer-events: none;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
+  padding: 8px 11px;
+  font-size: 13px;
+  white-space: nowrap;
+  color: #1a1a1a;
+}
+.dc-tip__title {
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+.dc-tip__row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #444;
+}
+.dc-tip__row i {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+/* Pie */
+.dc-pie {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.dc-pie__svg {
+  width: 230px;
+  max-width: 60%;
+  height: auto;
+}
+.dc-pie__g {
+  transform-origin: center;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease;
+}
+.dc-pie__slice {
+  transform-origin: center;
+  transition: transform 0.18s ease, opacity 0.18s ease, filter 0.18s ease;
+  cursor: pointer;
+}
+.dc-pie__slice:hover {
+  filter: brightness(1.08);
+}
+.dc-pie__slice[data-dim="true"] {
+  opacity: 0.45;
+}
+.dc-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px 12px;
+  font-size: 13px;
+  color: var(--trex-ink, #222);
+}
+.dc-legend li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: default;
+  transition: opacity 0.15s ease;
+}
+.dc-legend li[data-dim="true"] {
+  opacity: 0.45;
+}
+.dc-legend i {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex: 0 0 auto;
+}
+
+/* Bars */
+.dc-bars {
+  padding-left: 6px;
+}
+.dc-bars__plot {
+  position: relative;
+  display: flex;
+  height: 230px;
+}
+.dc-bars__yaxis {
+  position: relative;
+  width: 18px;
+  flex: 0 0 auto;
+  font-size: 11px;
+  color: var(--trex-muted, #666);
+}
+.dc-bars__yaxis span {
+  position: absolute;
+  right: 2px;
+  transform: translateY(50%);
+}
+.dc-bars__cols {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  border-left: 1px solid rgba(0, 0, 0, 0.18);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.18);
+  padding: 0 2px;
+}
+.dc-bars__col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.dc-bars__col[data-dim="true"] {
+  opacity: 0.4;
+}
+.dc-bars__bar-wrap {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.dc-bars__bar {
+  width: 78%;
+  border-radius: 2px 2px 0 0;
+  transition: height 0.7s cubic-bezier(0.22, 1, 0.36, 1), filter 0.15s ease;
+}
+.dc-bars__col:hover .dc-bars__bar {
+  filter: brightness(1.12);
+}
+.dc-bars__label {
+  font-size: 9.5px;
+  color: var(--trex-muted, #555);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  margin-top: 4px;
+  white-space: nowrap;
+  max-height: 70px;
+  overflow: hidden;
+}
+.dc-bars__ytitle {
+  font-size: 11px;
+  color: var(--trex-muted, #666);
+  margin-top: 2px;
+  padding-left: 22px;
+}
+
 /* Author names link to their homepages: inherit the author colour, reveal a
    gold underline on hover (the global gold-link rule skips .article-author-link). */
 .article-author-link {
@@ -738,6 +902,15 @@ body {
   transform: scale(0.4);
   transform-origin: top left;
   pointer-events: none;
+}
+/* Chrome-less 4-wide video wall: taller box, frame fills it 1:1 (no scaling). */
+.ds-preview--wall {
+  height: 460px;
+}
+.ds-preview__frame--embed {
+  width: 100%;
+  height: 100%;
+  transform: none;
 }
 .ds-preview__overlay {
   position: absolute;
