@@ -84,7 +84,7 @@
    Both layers fill the exact same box (object-fit:fill) so they are pixel
    aligned — no doubled text / edge lines. */
 .teaser-anim__base,
-.teaser-anim__overlay {
+.teaser-anim__region {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -93,6 +93,7 @@
   display: block;
 }
 .teaser-anim__base { opacity: 0.4; }
+.teaser-anim__region { transition: opacity 0.7s ease; }
 .teaser-anim__beat {
   margin-top: 12px;
   padding: 9px 14px;

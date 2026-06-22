@@ -80,41 +80,21 @@ export default function TeaserAnimation() {
       <div className="teaser-anim">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className="teaser-anim__base" src={SRC} alt="T-Rex overview" />
-        {/* ONE full-colour overlay, clipped to the union of the lit regions.
-            A single opaque layer over the pale base => no region-vs-region
-            doubling and no seam lines, whatever the inset values are. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className="teaser-anim__overlay"
-          src={SRC}
-          alt=""
-          aria-hidden="true"
-          style={{ clipPath: "url(#teaser-clip)", WebkitClipPath: "url(#teaser-clip)" }}
-        />
-        <svg width="0" height="0" aria-hidden="true" focusable="false" style={{ position: "absolute" }}>
-          <defs>
-            <clipPath id="teaser-clip" clipPathUnits="objectBoundingBox">
-              {REGIONS.map((r, i) => {
-                if (!lit(i)) return null;
-                const m = r.clip.match(/inset\(([\d.]+)% ([\d.]+)% ([\d.]+)% ([\d.]+)%\)/);
-                if (!m) return null;
-                const top = Number(m[1]) / 100;
-                const right = Number(m[2]) / 100;
-                const bottom = Number(m[3]) / 100;
-                const left = Number(m[4]) / 100;
-                return (
-                  <rect
-                    key={i}
-                    x={left}
-                    y={top}
-                    width={Math.max(0, 1 - left - right)}
-                    height={Math.max(0, 1 - top - bottom)}
-                  />
-                );
-              })}
-            </clipPath>
-          </defs>
-        </svg>
+        {/* One full-colour copy per region, clipped to that region and faded in
+            when lit. All layers fill the exact same box (object-fit:fill on the
+            fixed-aspect container) so they are pixel-identical — overlapping
+            copies don't double, and each region gently brightens from pale. */}
+        {REGIONS.map((r, i) => (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={i}
+            className="teaser-anim__region"
+            src={SRC}
+            alt=""
+            aria-hidden="true"
+            style={{ clipPath: r.clip, WebkitClipPath: r.clip, opacity: lit(i) ? 1 : 0 }}
+          />
+        ))}
       </div>
 
       <div className="teaser-anim__beat">{caption}</div>
