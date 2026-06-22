@@ -473,8 +473,8 @@
 
         const POOL_SIZE    = 500;  // random subset drawn from the full dataset
         // Far fewer cards in the embedded home-page wall — 60 simultaneous <video>
-        // elements there crashed the parent tab; 12 fills the 4-wide preview.
-        const DISPLAY_SIZE = document.documentElement.classList.contains('embed') ? 12 : 60;
+        // elements there crashed the parent tab; 16 fills the 4×4 preview.
+        const DISPLAY_SIZE = document.documentElement.classList.contains('embed') ? 16 : 60;
         const TOP_N        = 10;   // top-N + "Other" bucket per category
 
         // ===== State =====

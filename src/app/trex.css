@@ -1046,9 +1046,11 @@ body {
   transform-origin: top left;
   pointer-events: none;
 }
-/* Chrome-less 4-wide video wall: taller box, frame fills it 1:1 (no scaling). */
+/* Chrome-less 4-wide video wall: height tracks width so exactly 4 rows of
+   16:9 cards (a 4×4 wall) fit at any screen size. Frame fills it 1:1. */
 .ds-preview--wall {
-  height: 460px;
+  height: auto;
+  aspect-ratio: 16 / 9.4;
 }
 .ds-preview__frame--embed {
   width: 100%;
