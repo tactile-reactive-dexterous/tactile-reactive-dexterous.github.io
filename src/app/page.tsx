@@ -8,7 +8,7 @@ import DemoGallery from "@/components/DemoGallery";
 import ZoomableImage from "@/components/ZoomableImage";
 import CitationBibtex from "@/components/CitationBibtex";
 import { AblationBars, ResultsBars, ResultsTable } from "@/components/ResultsChart";
-import { CategoryPie, VerbBars } from "@/components/DatasetCharts";
+import { CategoryPie, VerbBars, ObjectFrequencyBars } from "@/components/DatasetCharts";
 import FailureExplorer from "@/components/FailureExplorer";
 import TrexLineFigure, { SPLIT_STEP_PANELS, DATA_EFFICIENCY_PANELS, DATA_EFFICIENCY_LEGEND } from "@/components/TrexLineCharts";
 
@@ -281,7 +281,7 @@ function ArticleContent() {
                 <VerbBars />
               </div>
               <div className="chart-cell chart-cell--object">
-                <ZoomableImage src="/figures/object_frequency_chart.png" alt="Demonstrations per object (long tail)" width={7466} height={1179} />
+                <ObjectFrequencyBars />
               </div>
             </div>
             <figcaption>

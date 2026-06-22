@@ -3,7 +3,7 @@
 import { Maximize2, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { CATEGORY_DURATION, VERB_HOURS } from "@/data/trex";
+import { CATEGORY_DURATION, VERB_HOURS, OBJECT_BARS, OBJECT_CAT_SPANS } from "@/data/trex";
 import { useInView } from "@/lib/useInView";
 
 // Interactive SVG re-creations of the original matplotlib pie / verb-hours bar
@@ -310,4 +310,115 @@ function BarsChart() {
 
 export function VerbBars() {
   return <Expandable label="motion-primitive hours" render={() => <BarsChart />} />;
+}
+
+// --- Long-tail bars: episodes per object, grouped & coloured by category -----
+// Same data / order / colours as object_frequency_chart.png (210 objects, log
+// y-axis, category background bands). Hovering a bar surfaces its object name,
+// episode count, and category — matching the top-right VerbBars interaction.
+const OBJ_LOG_MIN = Math.log10(0.8);     // axis bottom (just below 1 so count=1 shows a sliver)
+const OBJ_LOG_MAX = Math.log10(820);     // headroom = max count (82) × 10, like the figure
+
+// Darken a category hex toward black so the band label stays readable on white.
+function darken(hex: string, f = 0.42) {
+  const h = hex.replace("#", "");
+  const c = [0, 2, 4].map((i) => Math.round(parseInt(h.slice(i, i + 2), 16) * (1 - f)));
+  return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+}
+
+function ObjectBarsChart() {
+  const { ref, inView } = useInView<HTMLDivElement>(0.2);
+  const [active, setActive] = useState<number | null>(null);
+  const [tip, setTip] = useState<Tip>(null);
+
+  const n = OBJECT_BARS.length;
+  const W = 1400;
+  const H = 300;
+  const ml = 50;  // left margin (y-axis + label)
+  const mr = 8;
+  const mt = 26;  // top margin for category labels
+  const mb = 14;
+  const plotW = W - ml - mr;
+  const plotH = H - mt - mb;
+  const baseline = mt + plotH;
+  const yOf = (c: number) =>
+    r3(baseline - ((Math.log10(Math.max(0.8, c)) - OBJ_LOG_MIN) / (OBJ_LOG_MAX - OBJ_LOG_MIN)) * plotH);
+  const slot = plotW / n;
+  const barW = r3(slot * 0.82);
+  const catOf = (i: number) => OBJECT_CAT_SPANS.find((s) => i >= s.start && i <= s.end)?.cat ?? "";
+
+  return (
+    <div className="dc-chart dc-bars dc-objbars" ref={ref} onMouseLeave={() => { setActive(null); setTip(null); }}>
+      <svg
+        viewBox={`0 0 ${W} ${H}`}
+        className="dc-bars__svg"
+        role="img"
+        aria-label="Episodes per object, grouped by category"
+        onMouseLeave={() => { setActive(null); setTip(null); }}
+      >
+        {/* category background bands + labels */}
+        {OBJECT_CAT_SPANS.map((sp) => {
+          const x0 = r3(ml + sp.start * slot);
+          const x1 = r3(ml + (sp.end + 1) * slot);
+          return (
+            <g key={sp.cat}>
+              <rect x={x0} y={mt} width={r3(x1 - x0)} height={r3(baseline - mt)} fill={sp.color} opacity={0.12} />
+              <text
+                x={r3((x0 + x1) / 2)}
+                y={mt - 9}
+                textAnchor="middle"
+                fill={darken(sp.color)}
+                style={{ fontSize: 10.5, fontWeight: 600 }}
+              >
+                {sp.cat}
+              </text>
+            </g>
+          );
+        })}
+        {/* y grid + ticks (log: 1, 10, 100) */}
+        {[1, 10, 100].map((g) => (
+          <g key={g}>
+            <line x1={ml} y1={yOf(g)} x2={W - mr} y2={yOf(g)} className="dc-bars__grid" />
+            <text x={ml - 7} y={yOf(g)} className="dc-bars__ytick" textAnchor="end" dominantBaseline="central">{g}</text>
+          </g>
+        ))}
+        {/* axes */}
+        <line x1={ml} y1={mt} x2={ml} y2={baseline} className="dc-bars__axis" />
+        <line x1={ml} y1={baseline} x2={W - mr} y2={baseline} className="dc-bars__axis" />
+        <text className="dc-bars__ytitle" transform={`translate(13 ${mt + plotH / 2}) rotate(-90)`} textAnchor="middle">
+          # Episodes (log scale)
+        </text>
+        {/* bars */}
+        {OBJECT_BARS.map((o, i) => {
+          const x = r3(ml + i * slot + (slot - barW) / 2);
+          const topY = yOf(o.count);
+          const full = r3(baseline - topY);
+          return (
+            <g key={o.name} data-dim={active !== null && active !== i ? "true" : undefined} className="dc-bars__col">
+              <rect
+                x={x}
+                y={inView ? topY : baseline}
+                width={barW}
+                height={inView ? full : 0}
+                fill={o.color}
+                className="dc-bars__bar"
+                style={{ transitionDelay: `${Math.min(i * 6, 700)}ms` }}
+                onMouseEnter={(e) => {
+                  setActive(i);
+                  const p = tipPos(e);
+                  setTip({ ...p, title: o.label, line: `${o.count} episode${o.count === 1 ? "" : "s"} · ${catOf(i)}`, swatch: o.color });
+                }}
+                onMouseMove={(e) => { const p = tipPos(e); setTip((t) => (t ? { ...t, ...p } : t)); }}
+              />
+            </g>
+          );
+        })}
+      </svg>
+      <Tooltip tip={tip} />
+    </div>
+  );
+}
+
+export function ObjectFrequencyBars() {
+  return <Expandable label="episodes per object" render={() => <ObjectBarsChart />} />;
 }
