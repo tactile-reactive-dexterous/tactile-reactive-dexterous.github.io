@@ -72,31 +72,27 @@
 .teaser-anim {
   position: relative;
   width: 100%;
+  aspect-ratio: 4060 / 2393; /* teaser.png native ratio → deterministic box */
   border: 1px solid var(--trex-line);
   border-radius: 12px;
   overflow: hidden;
   background: #fff;
 }
-/* "off" state = very pale colour, like a ~60% white cloth over the figure
-   (low opacity over the white card keeps the hues but washes them out — not
-   grayscale). Each region copy fades in at full opacity to "light up". The
-   base (in flow) sets the box size; region copies fill that exact box with
-   object-fit:fill so every layer is pixel-aligned. */
-.teaser-anim__base {
-  display: block;
-  width: 100%;
-  height: auto;
-  opacity: 0.4;
-}
-.teaser-anim__region {
+/* "off" state = very pale colour, like a ~60% white cloth over the figure (low
+   opacity over the white card keeps the hues but washes them out — not
+   grayscale). The full-colour overlay sits on top, clipped to the lit regions.
+   Both layers fill the exact same box (object-fit:fill) so they are pixel
+   aligned — no doubled text / edge lines. */
+.teaser-anim__base,
+.teaser-anim__overlay {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: fill;
-  transition: opacity 0.6s ease;
+  display: block;
 }
+.teaser-anim__base { opacity: 0.4; }
 .teaser-anim__beat {
   margin-top: 12px;
   padding: 9px 14px;

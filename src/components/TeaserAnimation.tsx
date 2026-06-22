@@ -14,11 +14,11 @@ const SRC = "/figures/teaser.png";
 // teaser.png layout (Human Egocentric | T-Rex Model {Latent+Action / Tactile} /
 // T-Rex Dataset | Post-training Tasks).
 const REGIONS = [
-  { name: "Human egocentric pre-training", clip: "inset(1.8% 77.5% 1.8% 0%)" },
-  { name: "Latent + Action experts — slow visuomotor planning", clip: "inset(2% 41.3% 49% 22%)" },
-  { name: "T-Rex Dataset — tactile-rich mid-training", clip: "inset(50.5% 22% 2.8% 21%)" },
-  { name: "Tactile expert — fast tactile refinement", clip: "inset(2% 23% 49% 58.4%)" },
-  { name: "Post-training tasks — contact-rich skills", clip: "inset(1.8% 1.2% 1.8% 77.5%)" },
+  { name: "Human egocentric pre-training", clip: "inset(0% 77.5% 0% 0%)" },
+  { name: "Latent + Action experts — slow visuomotor planning", clip: "inset(0% 40.6% 48% 22%)" },
+  { name: "T-Rex Dataset — tactile-rich mid-training", clip: "inset(51.9% 21.2% 0% 21%)" },
+  { name: "Tactile expert — fast tactile refinement", clip: "inset(0% 21.2% 48% 58.4%)" },
+  { name: "Post-training tasks — contact-rich skills", clip: "inset(0% 0% 0% 77.6%)" },
 ];
 const N = REGIONS.length;
 const DURATION = 7000; // ms for the bar to fill 0 -> 100%
@@ -80,17 +80,41 @@ export default function TeaserAnimation() {
       <div className="teaser-anim">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className="teaser-anim__base" src={SRC} alt="T-Rex overview" />
-        {REGIONS.map((r, i) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            key={i}
-            className="teaser-anim__region"
-            src={SRC}
-            alt=""
-            aria-hidden="true"
-            style={{ clipPath: r.clip, WebkitClipPath: r.clip, opacity: lit(i) ? 1 : 0 }}
-          />
-        ))}
+        {/* ONE full-colour overlay, clipped to the union of the lit regions.
+            A single opaque layer over the pale base => no region-vs-region
+            doubling and no seam lines, whatever the inset values are. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="teaser-anim__overlay"
+          src={SRC}
+          alt=""
+          aria-hidden="true"
+          style={{ clipPath: "url(#teaser-clip)", WebkitClipPath: "url(#teaser-clip)" }}
+        />
+        <svg width="0" height="0" aria-hidden="true" focusable="false" style={{ position: "absolute" }}>
+          <defs>
+            <clipPath id="teaser-clip" clipPathUnits="objectBoundingBox">
+              {REGIONS.map((r, i) => {
+                if (!lit(i)) return null;
+                const m = r.clip.match(/inset\(([\d.]+)% ([\d.]+)% ([\d.]+)% ([\d.]+)%\)/);
+                if (!m) return null;
+                const top = Number(m[1]) / 100;
+                const right = Number(m[2]) / 100;
+                const bottom = Number(m[3]) / 100;
+                const left = Number(m[4]) / 100;
+                return (
+                  <rect
+                    key={i}
+                    x={left}
+                    y={top}
+                    width={Math.max(0, 1 - left - right)}
+                    height={Math.max(0, 1 - top - bottom)}
+                  />
+                );
+              })}
+            </clipPath>
+          </defs>
+        </svg>
       </div>
 
       <div className="teaser-anim__beat">{caption}</div>
