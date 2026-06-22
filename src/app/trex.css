@@ -631,8 +631,8 @@ video.fig-img { background: #000; }
 /* High-specificity + clamp so the title always scales a touch and stays LARGER
    than the body at every width — beats the large-screen `.article-shell p/li`
    rules (21–23px) that were inflating the card body past the heading. */
-.figure-page .article-shell .fail-card h4 { margin: 0 0 6px; font-family: var(--font-heading); font-weight: 500; font-size: clamp(17px, 1.3vw, 21px); }
-.figure-page .article-shell .fail-card p { margin: 0; font-size: clamp(14px, 0.95vw, 16px); line-height: 1.5; color: var(--trex-muted); }
+.figure-page .article-shell .fail-card h4 { margin: 0 0 6px; font-family: var(--font-heading); font-weight: 500; font-size: clamp(17px, 1.1vw, 19px); }
+.figure-page .article-shell .fail-card p { margin: 0; font-size: clamp(14px, 0.9vw, 15px); line-height: 1.5; color: var(--trex-muted); }
 
 /* Interactive failure explorer: cards select a mode, viewer shows its filmstrip */
 .fail-explorer { margin: 30px 0 0; }
@@ -717,17 +717,17 @@ video.fig-img { background: #000; }
 @media (min-width: 1500px) {
   .article-shell { width: min(1120px, 92%); }
   .figure-page .article-shell p,
-  .figure-page .article-shell li { font-size: 21px; }
+  .figure-page .article-shell li { font-size: 17px; }
 }
 @media (min-width: 1800px) {
   .article-shell { width: min(1280px, 90%); }
   .figure-page .article-shell p,
-  .figure-page .article-shell li { font-size: 22px; }
+  .figure-page .article-shell li { font-size: 18px; }
 }
 @media (min-width: 2200px) {
   .article-shell { width: min(1440px, 88%); }
   .figure-page .article-shell p,
-  .figure-page .article-shell li { font-size: 23px; }
+  .figure-page .article-shell li { font-size: 18px; }
 }
 
 /* ============================================================================
