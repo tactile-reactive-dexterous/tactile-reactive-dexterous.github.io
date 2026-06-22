@@ -41,7 +41,7 @@ export default function FailureExplorer() {
             type="button"
           >
             <h4>{c.mode}</h4>
-            <p><strong>{c.task}.</strong> {c.text}</p>
+            <p>{c.text}</p>
           </button>
         ))}
       </div>

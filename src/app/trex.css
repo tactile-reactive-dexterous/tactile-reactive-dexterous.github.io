@@ -624,8 +624,11 @@
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
-.fail-card h4 { margin: 0 0 6px; font-family: var(--font-heading); font-weight: 500; font-size: 17px; }
-.fail-card p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--trex-muted); }
+/* High-specificity + clamp so the title always scales a touch and stays LARGER
+   than the body at every width — beats the large-screen `.article-shell p/li`
+   rules (21–23px) that were inflating the card body past the heading. */
+.figure-page .article-shell .fail-card h4 { margin: 0 0 6px; font-family: var(--font-heading); font-weight: 500; font-size: clamp(17px, 1.3vw, 21px); }
+.figure-page .article-shell .fail-card p { margin: 0; font-size: clamp(14px, 0.95vw, 16px); line-height: 1.5; color: var(--trex-muted); }
 
 /* Interactive failure explorer: cards select a mode, viewer shows its filmstrip */
 .fail-explorer { margin: 30px 0 0; }
