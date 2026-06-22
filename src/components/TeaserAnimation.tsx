@@ -14,10 +14,10 @@ const SRC = "/figures/teaser.png";
 // teaser.png layout (Human Egocentric | T-Rex Model {Latent+Action / Tactile} /
 // T-Rex Dataset | Post-training Tasks).
 const REGIONS = [
-  { name: "Human egocentric pre-training", clip: "inset(0% 77.5% 0% 0%)" },
-  { name: "Latent + Action experts — slow visuomotor planning", clip: "inset(0% 40.6% 48% 22%)" },
-  { name: "T-Rex Dataset — tactile-rich mid-training", clip: "inset(51.9% 21.2% 0% 21%)" },
-  { name: "Tactile expert — fast tactile refinement", clip: "inset(0% 21.2% 48% 58.4%)" },
+  { name: "Human egocentric pre-training", clip: "inset(0% 78% 0% 0%)" },
+  { name: "Latent + Action experts — slow visuomotor planning", clip: "inset(0% 40.6% 47.5% 22%)" },
+  { name: "T-Rex Dataset — tactile-rich mid-training", clip: "inset(51.9% 20.5% 0% 21%)" },
+  { name: "Tactile expert — fast tactile refinement", clip: "inset(0% 20.5% 48% 58.4%)" },
   { name: "Post-training tasks — contact-rich skills", clip: "inset(0% 0% 0% 77.6%)" },
 ];
 const N = REGIONS.length;
