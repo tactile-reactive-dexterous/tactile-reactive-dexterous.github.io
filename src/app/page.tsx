@@ -318,6 +318,18 @@ function ArticleContent() {
               asynchronous cascaded flow-matching scheme.
             </figcaption>
           </figure>
+          <figure className="trex-figure">
+            <video
+              className="fig-img"
+              src="/figures/trex_architecture_live.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+            />
+            <figcaption>The architecture in motion — the asynchronous cascaded flow-matching rollout.</figcaption>
+          </figure>
           <p>
             The interaction is an <strong>asynchronous cascaded flow-matching</strong> scheme. The flow trajectory is
             split at τ = 0.4: the action expert integrates the upper segment (τ : 1 → 0.4) over 6 steps to produce a
