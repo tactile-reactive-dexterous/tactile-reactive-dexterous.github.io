@@ -30,10 +30,16 @@ function tipPos(e: React.MouseEvent, pad = 14) {
   return { x: e.clientX - box.left + pad, y: e.clientY - box.top + pad };
 }
 
+// Round every coordinate written into an SVG attribute to a fixed precision so
+// the server-rendered string and the client-rendered string are byte-identical
+// (raw Math.cos/sin/division differ in their last float digit between the SSR
+// and browser passes, which would trigger a React hydration mismatch).
+const r3 = (n: number) => Math.round(n * 1000) / 1000;
+
 // --- Pie: demonstration time per task category -----------------------------
 function polar(cx: number, cy: number, r: number, angle: number) {
   const a = ((angle - 90) * Math.PI) / 180;
-  return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+  return { x: r3(cx + r * Math.cos(a)), y: r3(cy + r * Math.sin(a)) };
 }
 function arcPath(cx: number, cy: number, r: number, start: number, end: number) {
   const s = polar(cx, cy, r, start);
@@ -143,9 +149,9 @@ export function VerbBars() {
   const plotH = H - mt - mb;
   const baseline = mt + plotH;
   const axisMax = 6.4; // ticks at 0,2,4,6; tallest bar (6.11) fits
-  const yOf = (h: number) => baseline - (h / axisMax) * plotH;
+  const yOf = (h: number) => r3(baseline - (h / axisMax) * plotH);
   const slot = plotW / n;
-  const barW = slot * 0.66;
+  const barW = r3(slot * 0.66);
 
   return (
     <div className="dc-chart dc-bars" ref={ref} onMouseLeave={() => { setActive(null); setTip(null); }}>
@@ -167,9 +173,10 @@ export function VerbBars() {
         </text>
         {/* bars */}
         {VERB_HOURS.map((v, i) => {
-          const x = ml + i * slot + (slot - barW) / 2;
+          const x = r3(ml + i * slot + (slot - barW) / 2);
           const topY = yOf(v.hours);
-          const full = baseline - topY;
+          const full = r3(baseline - topY);
+          const xMid = r3(x + barW / 2);
           return (
             <g key={v.verb} data-dim={active !== null && active !== i ? "true" : undefined} className="dc-bars__col">
               <rect
@@ -189,7 +196,7 @@ export function VerbBars() {
               />
               <text
                 className="dc-bars__xtick"
-                transform={`translate(${x + barW / 2} ${baseline + 6}) rotate(-75)`}
+                transform={`translate(${xMid} ${baseline + 6}) rotate(-75)`}
                 textAnchor="end"
                 dominantBaseline="central"
               >
