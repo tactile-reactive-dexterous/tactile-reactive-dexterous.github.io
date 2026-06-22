@@ -679,6 +679,15 @@
   overflow: hidden;
   border: 1px solid var(--trex-line);
   border-radius: 8px;
+  background: #fff;
+}
+/* scale the cropped content down slightly → even white padding inside the frame.
+   ↓↓ 留白旋钮：0.95 = 内容缩到 95%，四周留白；想留白更多就调小（如 0.92）。 */
+.fail-stage__crop {
+  position: absolute;
+  inset: 0;
+  transform: scale(0.95);
+  transform-origin: center;
 }
 .fail-stage__img {
   position: absolute;

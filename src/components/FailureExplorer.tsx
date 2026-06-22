@@ -54,14 +54,18 @@ export default function FailureExplorer() {
         {/* The full figure is cropped to the active row by a fixed-aspect window
             (overflow hidden) + a vertical shift; clicking opens the whole figure. */}
         <div className="fail-stage__viewer" style={{ aspectRatio: `${IMG_W} / ${row.bottom - row.top}` }}>
-          <ZoomableImage
-            className="fail-stage__img"
-            src="/figures/fail_case.jpg"
-            alt={`${f.task} failure rollout — ${f.mode}`}
-            width={IMG_W}
-            height={IMG_H}
-            style={{ transform: `translateY(-${((row.top / IMG_H) * 100).toFixed(3)}%)` }}
-          />
+          {/* inner wrapper scales the content down a touch so there's even white
+              padding inside the (unchanged) frame — tune scale() below. */}
+          <div className="fail-stage__crop">
+            <ZoomableImage
+              className="fail-stage__img"
+              src="/figures/fail_case.jpg"
+              alt={`${f.task} failure rollout — ${f.mode}`}
+              width={IMG_W}
+              height={IMG_H}
+              style={{ transform: `translateY(-${((row.top / IMG_H) * 100).toFixed(3)}%)` }}
+            />
+          </div>
         </div>
         <figcaption>
           <strong>{f.mode}</strong> — {f.task}. The red box marks the contact issue behind the failure. Hover a card
