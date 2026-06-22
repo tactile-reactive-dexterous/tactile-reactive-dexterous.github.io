@@ -1,6 +1,6 @@
 "use client";
 
-import { RotateCcw, X } from "lucide-react";
+import { Pause, Play, RotateCcw, X } from "lucide-react";
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -35,6 +35,7 @@ export default function ExpandableVideoViewer({
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [duration, setDuration] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [playing, setPlaying] = useState(true);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -73,6 +74,13 @@ export default function ExpandableVideoViewer({
     video.playbackRate = playbackRate;
     setProgress(0);
     await video.play();
+  };
+
+  const togglePlay = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) video.play().catch(() => undefined);
+    else video.pause();
   };
 
   const scrub = (nextProgress: number) => {
@@ -117,6 +125,8 @@ export default function ExpandableVideoViewer({
             const video = event.currentTarget;
             setProgress(video.duration ? video.currentTime / video.duration : 0);
           }}
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
           playsInline
           poster={poster}
           preload="auto"
@@ -127,6 +137,13 @@ export default function ExpandableVideoViewer({
           className="expandable-video-modal__controls"
           style={{ "--expandable-video-progress": progress } as CSSProperties}
         >
+          <button aria-label={playing ? `Pause ${title}` : `Play ${title}`} onClick={togglePlay} type="button">
+            {playing ? (
+              <Pause aria-hidden="true" size={15} strokeWidth={1.9} />
+            ) : (
+              <Play aria-hidden="true" size={15} strokeWidth={1.9} />
+            )}
+          </button>
           <button aria-label={`Replay ${title}`} onClick={replay} type="button">
             <RotateCcw aria-hidden="true" size={15} strokeWidth={1.9} />
           </button>
