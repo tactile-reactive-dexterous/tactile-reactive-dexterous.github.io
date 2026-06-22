@@ -1,7 +1,5 @@
 "use client";
 
-import { hf } from "@/data/trex";
-
 // Hero with a continuously-playing teaser video (autoplay + loop, never gated by
 // scroll). The overlaid title was removed per request — the video plays clean,
 // and the real paper title lives in the article header below.
@@ -17,7 +15,7 @@ export default function TrexHero() {
           muted
           playsInline
           preload="auto"
-          src={hf.overview}
+          src="/figures/hero_short.mp4"
         />
         <a className="scroll-cue" href="#article-content">
           Scroll to explore

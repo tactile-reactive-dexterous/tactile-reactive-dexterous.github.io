@@ -6,7 +6,6 @@ import { Fragment, useEffect, useState } from "react";
 import TrexHero from "@/components/TrexHero";
 import DemoGallery from "@/components/DemoGallery";
 import ZoomableImage from "@/components/ZoomableImage";
-import TeaserAnimation from "@/components/TeaserAnimation";
 import CitationBibtex from "@/components/CitationBibtex";
 import { AblationBars, ResultsBars, ResultsTable } from "@/components/ResultsChart";
 import { CategoryPie, VerbBars } from "@/components/DatasetCharts";
@@ -201,8 +200,19 @@ function ArticleContent() {
             </div>
           </header>
 
-          {/* ---- Teaser figure (animated staged light-up) ---- */}
-          <TeaserAnimation />
+          {/* ---- Teaser figure (overview video) ---- */}
+          <figure className="trex-figure">
+            <video
+              className="fig-img"
+              src="/figures/teaser_full.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              controls
+              preload="metadata"
+            />
+          </figure>
 
           {/* ---- Abstract ---- */}
           <h2 id="abstract">Abstract</h2>
