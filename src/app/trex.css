@@ -86,7 +86,9 @@
 .teaser-anim__base,
 .teaser-anim__region {
   position: absolute;
-  inset: 0.6%; /* a hair of breathing room so the figure's edges aren't clipped */
+  /* a hair of breathing room so the figure's edges aren't clipped — extra on
+     the right and bottom (inset: top right bottom left). */
+  inset: 0.6% 1.6% 1.6% 0.6%;
   width: auto;
   height: auto;
   object-fit: fill;
