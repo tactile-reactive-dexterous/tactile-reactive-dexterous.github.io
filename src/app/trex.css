@@ -660,7 +660,7 @@
   border-radius: 3px;
   background: linear-gradient(90deg, var(--trex-gold-bright), rgba(242, 168, 30, 0.15));
   position: relative;
-  margin-top: 5px; /* nudge the arrow line down so it sits a touch below the label baseline */
+  margin-top: 2px; /* vertical position of the arrow relative to the label */
 }
 .fail-stage__arrow::after {
   content: "";

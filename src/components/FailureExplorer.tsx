@@ -14,12 +14,12 @@ import { FAILURE_CASES } from "@/data/trex";
 const IMG_W = 2101;
 const IMG_H = 2076;
 const ROWS = [
-  { top: 65, bottom: 407 },    // 1 Object collision — Screw lightbulb
-  { top: 405, bottom: 736 },   // 2 Slipping off — Open lock
-  { top: 737, bottom: 1069 },  // 3 Imprecise position — Transfer egg
-  { top: 1070, bottom: 1402 }, // 4 Multi-finger friction — Sort mahjong
-  { top: 1403, bottom: 1739 }, // 5 Excessive force — Apply toothpaste
-  { top: 1740, bottom: 2076 }, // 6 Sliding misalignment — Extract card
+  { top: 71, bottom: 408 },    // 1 Object collision — Screw lightbulb
+  { top: 408, bottom: 742 },   // 2 Slipping off — Open lock
+  { top: 742, bottom: 1069 },  // 3 Imprecise position — Transfer egg
+  { top: 1070, bottom: 1408 }, // 4 Multi-finger friction — Sort mahjong
+  { top: 1408, bottom: 1743 }, // 5 Excessive force — Apply toothpaste
+  { top: 1743, bottom: 2079 }, // 6 Sliding misalignment — Extract card
 ];
 
 export default function FailureExplorer() {
