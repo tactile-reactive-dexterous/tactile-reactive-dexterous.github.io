@@ -1126,9 +1126,11 @@ body {
   align-items: center;
   justify-content: center;
   padding: 28px;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0); /* softer veil, fades in (matches the chart modal) */
+  transition: background 0.3s ease;
   cursor: zoom-out;
 }
+.img-lightbox[data-open="true"] { background: rgba(0, 0, 0, 0.6); }
 .img-lightbox__img {
   max-width: 96vw;
   max-height: 92vh;
@@ -1137,6 +1139,8 @@ body {
   background: #fff;
   cursor: default;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  will-change: transform, opacity;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
 }
 .img-lightbox__close {
   position: fixed;
