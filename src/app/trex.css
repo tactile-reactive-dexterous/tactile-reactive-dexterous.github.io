@@ -681,11 +681,14 @@
   border-radius: 8px;
   background: #fff;
 }
-/* scale the cropped content down slightly → even white padding inside the frame.
-   ↓↓ 留白旋钮：0.95 = 内容缩到 95%，四周留白；想留白更多就调小（如 0.92）。 */
+/* Clip to exactly the active row FIRST (overflow:hidden), then shrink that
+   already-cropped strip so only white padding shows around it — never the
+   neighbouring rows of the source figure.
+   ↓↓ 留白旋钮：0.95 = 裁好的图缩到 95%，四周留白；想留白更多就调小（如 0.92）。 */
 .fail-stage__crop {
   position: absolute;
   inset: 0;
+  overflow: hidden;
   transform: scale(0.95);
   transform-origin: center;
 }

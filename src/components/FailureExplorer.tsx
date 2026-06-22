@@ -14,7 +14,7 @@ import { FAILURE_CASES } from "@/data/trex";
 const IMG_W = 2101;
 const IMG_H = 2076;
 const ROWS = [
-  { top: 65, bottom: 405 },    // 1 Object collision — Screw lightbulb
+  { top: 65, bottom: 407 },    // 1 Object collision — Screw lightbulb
   { top: 405, bottom: 736 },   // 2 Slipping off — Open lock
   { top: 737, bottom: 1069 },  // 3 Imprecise position — Transfer egg
   { top: 1070, bottom: 1402 }, // 4 Multi-finger friction — Sort mahjong
