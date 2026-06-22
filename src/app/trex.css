@@ -775,11 +775,11 @@ body {
 .dc-pie {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0px;
   flex-wrap: nowrap;
 }
 .dc-pie__svg {
-  width: 50%;
+  width: 60%;
   max-width: 220px;
   height: auto;
   flex: 0 0 auto;
@@ -812,9 +812,9 @@ body {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 2px 10px;
+  gap: 0 10px; /* 第一个值=行距（上下）；现在收到 0，最紧 */
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1.15;
   color: var(--trex-ink, #1a1a1a);
 }
 .dc-legend li {
@@ -829,7 +829,7 @@ body {
    legend up to 21px). ↓↓ 图例字号旋钮：改这个数即可。 */
 .figure-page .article-shell .dc-legend,
 .figure-page .article-shell .dc-legend li {
-  font-size: 12px;
+  font-size: 8px;
 }
 .dc-legend li[data-dim="true"] {
   opacity: 0.4;
