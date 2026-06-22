@@ -31,40 +31,40 @@ const outlineItems: { href: string; label: string; level?: number }[] = [
 ];
 
 const authors = [
-  { name: "Dantong Niu", marks: "1,2,*" },
-  { name: "Zhuoyang Liu", marks: "1,*" },
-  { name: "Zekai Wang", marks: "1,*" },
-  { name: "Boning Shao", marks: "1" },
-  { name: "Zhao-Heng Yin", marks: "1" },
-  { name: "Anirudh Pai", marks: "1" },
-  { name: "Yuvan Sharma", marks: "1" },
-  { name: "Stefano Saravalle", marks: "5" },
-  { name: "Ruijie Zheng", marks: "2" },
-  { name: "Jing Wang", marks: "2" },
-  { name: "Ryan Punamiya", marks: "2" },
-  { name: "Mengda Xu", marks: "2" },
-  { name: "Yuqi Xie", marks: "2" },
-  { name: "Yunfan Jiang", marks: "2,3" },
-  { name: "Letian Fu", marks: "1" },
-  { name: "Konstantinos Kallidromitis", marks: "4" },
-  { name: "Matteo Gioia", marks: "5,6" },
-  { name: "Junyi Zhang", marks: "1" },
-  { name: "Jiaxin Ge", marks: "1" },
-  { name: "Haiwen Feng", marks: "1" },
-  { name: "Fabio Galasso", marks: "5,6" },
-  { name: "Wei Zhan", marks: "1" },
-  { name: "David M. Chan", marks: "1" },
-  { name: "Yutong Bai", marks: "1" },
-  { name: "Roei Herzig", marks: "1" },
-  { name: "Jiahui Lei", marks: "1" },
-  { name: "Fei-Fei Li", marks: "3" },
-  { name: "Ken Goldberg", marks: "1" },
-  { name: "Jitendra Malik", marks: "1" },
-  { name: "Pieter Abbeel", marks: "1" },
-  { name: "Yuke Zhu", marks: "2" },
-  { name: "Danfei Xu", marks: "2" },
-  { name: "Jim (Linxi) Fan", marks: "2" },
-  { name: "Trevor Darrell", marks: "1" },
+  { name: "Dantong Niu", marks: "1,2,*", url: "https://dantong88.github.io/" },
+  { name: "Zhuoyang Liu", marks: "1,*", url: "https://zhuoyang-liu.github.io/" },
+  { name: "Zekai Wang", marks: "1,*", url: "https://scholar.google.com/citations?user=Dngm3CYAAAAJ&hl=en" },
+  { name: "Boning Shao", marks: "1", url: "https://www.linkedin.com/in/boning-shao/" },
+  { name: "Zhao-Heng Yin", marks: "1", url: "https://zhaohengyin.github.io/" },
+  { name: "Anirudh Pai", marks: "1", url: "https://scholar.google.com/citations?user=9Iv9490AAAAJ&hl=en" },
+  { name: "Yuvan Sharma", marks: "1", url: "https://yuvansharma.github.io/" },
+  { name: "Stefano Saravalle", marks: "5", url: "https://scholar.google.com/citations?user=uQxwnnUAAAAJ&hl=en" },
+  { name: "Ruijie Zheng", marks: "2", url: "https://ruijiezheng.com/" },
+  { name: "Jing Wang", marks: "2", url: "https://scholar.google.com/citations?hl=en&user=cdL5PqgAAAAJ" },
+  { name: "Ryan Punamiya", marks: "2", url: "https://scholar.google.com/citations?hl=en&user=S-y6EGYAAAAJ" },
+  { name: "Mengda Xu", marks: "2", url: "https://mengdaxu.github.io/" },
+  { name: "Yuqi Xie", marks: "2", url: "https://xieleo5.github.io/" },
+  { name: "Yunfan Jiang", marks: "2,3", url: "https://yunfanj.com/" },
+  { name: "Letian Fu", marks: "1", url: "https://max-fu.github.io/" },
+  { name: "Konstantinos Kallidromitis", marks: "4", url: "https://scholar.google.com/citations?user=5EuNtbQAAAAJ&hl=en" },
+  { name: "Matteo Gioia", marks: "5,6", url: "https://matteogioia.github.io/" },
+  { name: "Junyi Zhang", marks: "1", url: "https://www.junyi42.com/" },
+  { name: "Jiaxin Ge", marks: "1", url: "https://gejiaxin.org/" },
+  { name: "Haiwen Feng", marks: "1", url: "https://havenfeng.github.io/" },
+  { name: "Fabio Galasso", marks: "5,6", url: "https://fgalasso.bitbucket.io/" },
+  { name: "Wei Zhan", marks: "1", url: "https://zhanwei.site/" },
+  { name: "David M. Chan", marks: "1", url: "https://dchan.cc/" },
+  { name: "Yutong Bai", marks: "1", url: "https://yutongbai.com/" },
+  { name: "Roei Herzig", marks: "1", url: "https://roeiherz.github.io/" },
+  { name: "Jiahui Lei", marks: "1", url: "https://jiahuilei.com/" },
+  { name: "Fei-Fei Li", marks: "3", url: "https://profiles.stanford.edu/fei-fei-li" },
+  { name: "Ken Goldberg", marks: "1", url: "https://www2.eecs.berkeley.edu/Faculty/Homepages/goldberg.html" },
+  { name: "Jitendra Malik", marks: "1", url: "https://people.eecs.berkeley.edu/~malik/" },
+  { name: "Pieter Abbeel", marks: "1", url: "https://www2.eecs.berkeley.edu/Faculty/Homepages/abbeel.html" },
+  { name: "Yuke Zhu", marks: "2", url: "https://yukezhu.me/" },
+  { name: "Danfei Xu", marks: "2", url: "https://faculty.cc.gatech.edu/~danfei/" },
+  { name: "Jim (Linxi) Fan", marks: "2", url: "https://jimfan.me/" },
+  { name: "Trevor Darrell", marks: "1", url: "https://people.eecs.berkeley.edu/~trevor/" },
 ];
 
 const affiliations = [
@@ -171,7 +171,7 @@ function ArticleContent() {
                 {authors.map((a, i) => (
                   <Fragment key={a.name}>
                     <span className="article-author">
-                      {a.name}
+                      <a className="article-author-link" href={a.url} rel="noopener noreferrer" target="_blank">{a.name}</a>
                       <sup>{a.marks}</sup>
                     </span>
                     {i < authors.length - 1 ? ", " : ""}

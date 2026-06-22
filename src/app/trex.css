@@ -660,6 +660,19 @@ body {
   white-space: normal;
   overflow-wrap: break-word;
 }
+/* Author names link to their homepages: inherit the author colour, reveal a
+   gold underline on hover (the global gold-link rule skips .article-author-link). */
+.article-author-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.article-author-link:hover {
+  color: var(--trex-gold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
 
 /* ---- dataset visualizer call-to-action card ------------------------------ */
 .ds-cta {
