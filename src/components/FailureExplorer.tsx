@@ -15,8 +15,8 @@ const IMG_W = 2101;
 const IMG_H = 2076;
 const ROWS = [
   { top: 71, bottom: 405 },    // 1 Object collision — Screw lightbulb
-  { top: 405, bottom: 741 },   // 2 Slipping off — Open lock
-  { top: 742, bottom: 1069 },  // 3 Imprecise position — Transfer egg
+  { top: 405, bottom: 739 },   // 2 Slipping off — Open lock
+  { top: 739, bottom: 1069 },  // 3 Imprecise position — Transfer egg
   { top: 1070, bottom: 1407 }, // 4 Multi-finger friction — Sort mahjong
   { top: 1407, bottom: 1742 }, // 5 Excessive force — Apply toothpaste
   { top: 1742, bottom: 2079 }, // 6 Sliding misalignment — Extract card
