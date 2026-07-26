@@ -1,6 +1,6 @@
 "use client";
 
-import { Code, FileText, List, X } from "lucide-react";
+import { Code, Database, FileText, List, X } from "lucide-react";
 import Image from "next/image";
 import { Fragment, useEffect, useState } from "react";
 import TrexHero from "@/components/TrexHero";
@@ -191,6 +191,9 @@ function ArticleContent() {
                 </a>
                 <a className="article-link" href="https://github.com/ZhuoyangLiu2005/T-Rex" rel="noopener noreferrer" target="_blank">
                   <Code aria-hidden="true" size={16} strokeWidth={1.8} /> Code
+                </a>
+                <a className="article-link" href="https://huggingface.co/datasets/zekaiwang/trex_dataset" rel="noopener noreferrer" target="_blank">
+                  <Database aria-hidden="true" size={16} strokeWidth={1.8} /> Dataset
                 </a>
               </div>
               <div className="article-logo-row" aria-label="Institution logos">
